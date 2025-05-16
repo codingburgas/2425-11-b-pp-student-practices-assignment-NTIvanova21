@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+body {
+    background-color: #9ACBD0;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: monospace;
+}
+
+
+.container{
+    height: 65vh;
+    width: 60vh;
+    background-color: #F2EFE7;
+}
+
+h1{
+    font-family: "JetBrains Mono", monospace;
+    color: #006A71;
+    margin-top: 3%;
+    margin-left: 30%;
+}
+#heading{
+    margin-left: 0;
+    margin-bottom: 1%;
+    margin-top: 1%;
+}
+.form-group{
+    padding: 5%;
+}
+.form-control{
+    height: 7vh;
+    background-color: #A5A5A5;
+    border-radius: 0;
+}
+
+.btn{
+    width: 80%;
+    background-color: #006A71;
+    height: 7vh;
+    border-radius: 0;
+    border: transparent;
+    margin-left: 10%;
+}
+.btn:hover{
+    background-color: #48A6A7;
+    border: transparent;
+}
+.btn:active{
+    background-color: #48A6A7;
+}
+input.form-control::placeholder, .form-control {
+    color: white;
+}
+input:focus::placeholder{
+    color: grey;
+}
+
+.error-messages,.alert-success, .alert-error {
+    margin-bottom: 1% ;
+    z-index: 10;
+    position: relative;
+    width: 60%;
+}
+.error-messages .alert {
+    margin-bottom: 0.5rem;
+}
+
+.alert-success{
+    background-color: #d1e7dd;
+}
+.alert-error{
+    background-color: #fff3cd;
+}

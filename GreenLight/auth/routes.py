@@ -13,8 +13,8 @@ from .. import login_manager
 def index():
     return redirect(url_for('auth.login'))
 @login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+def load_user(userId):
+    return User.query.get(int(userId))
 
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
@@ -24,22 +24,14 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
             if user.verify_password(form.password.data):
-                flash('Logged in',category='success')
-                # if user.role == form.role.data:
-                #     login_user(user)
-                #     return redirect(url_for('dash.dashboard'))
-                # else:
-                #     flash('Wrong role!',category='error')
-                #     return redirect(url_for('auth.login'))
+                login_user(user)
+                return redirect(url_for('main.home'))
             else:
-                flash('Invalid username or password',category='error')
-                return redirect(url_for('auth.login'))
+                flash('Invalid password', category='error')
         else:
-            flash('Invalid username or password', category='error')
-            return redirect(url_for('auth.login'))
+            flash('Email not found', category='error')
+        return redirect(url_for('auth.login'))
     return render_template('login.html', form=form, additional_css=url_for('static', filename='auth_base_style.css'))
-
-
 @auth_bp.route('/logout', methods=['GET', 'POST'])
 def logout():
     logout_user()
@@ -55,7 +47,8 @@ def register():
             flash('That username is already taken. Please choose another', "error")
             return redirect(url_for('auth.register'))
         else:
-            user = User(first_name=form.first_name.data, middle_name=form.middle_name.data, last_name=form.last_name.data, email=form.email.data, password = form.password.data)
+            user = User(first_name=form.first_name.data, middle_name=form.middle_name.data, last_name=form.last_name.data, email=form.email.data)
+            user.set_password(form.password.data)
             db.session.add(user)
             db.session.commit()
 

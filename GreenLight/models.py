@@ -12,19 +12,14 @@ class User(db.Model, UserMixin):
     middle_name = db.Column("MiddleName",db.String(50))
     last_name = db.Column("LastName",db.String(50))
     email = db.Column("Email",db.String(100), unique=True, nullable=False)
-    __password = db.Column("Password", db.String(255), nullable=False)
+    password = db.Column("Password", db.String(255), nullable=False)
     role = db.Column("Role",db.String(50),nullable=True)
 
-    @property
-    def password(self):
-        raise AttributeError("Password is write-only.")
-
-    @password.setter
-    def password(self, plaintext_password):
-        self.__password = generate_password_hash(plaintext_password)
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
 
     def verify_password(self, password):
-        return check_password_hash(self._password, password)
+        return check_password_hash(self.password, password)
 
     @property
     def id(self):

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('profile.static', filename='base_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('profile.static', filename='profilePageStyle.css') }}">
+{% endblock %}
+
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row split">
+            <div class="col-md-6  text-white d-flex flex-column align-items-center justify-content-center left-part">
+              <i class="fas fa-circle ms-2 profile-picture mb-3"></i>
+                <p class="text-center names">
+                    {{ user.first_name }} {{ user.middle_name }} {{ user.last_name }}
+                </p>
+            </div>
+            <div class="col-md-6 text-dark d-flex  justify-content-center right-part" style="background-color: #cce5ff; border-radius: 20px;">
+                <div class="info-box">
+                    <div class="row mb-3 info">
+                        <div class="col-6 text-start fw-bold">First name</div>
+                        <div class="col-6 text-end">{{ user.first_name }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-6 text-start fw-bold">Middle name</div>
+                        <div class="col-6 text-end">{{ user.middle_name }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-6 text-start fw-bold">Last name</div>
+                        <div class="col-6 text-end">{{ user.last_name }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-6 text-start fw-bold">Email</div>
+                        <div class="col-6 text-end">{{ user.email }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-6 text-start fw-bold">Role</div>
+                        <div class="col-6 text-end">{{ user.role }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-6 text-start fw-bold">Password</div>
+                        <div class="col-6 text-end">******</div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="d-flex justify-content-end">
+                <form method="POST" action="{{ url_for('profile.edit_profile', userId = user.userId) }}">
+                    <button type="submit" class="btn btn-sm btn-info mt-2">Edit account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

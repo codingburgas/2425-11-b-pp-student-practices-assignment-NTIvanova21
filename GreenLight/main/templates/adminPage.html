@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('main.static', filename='homePageStyle.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h2 class="mb-2">Account List</h2>
+        <table class="table table-striped table-bordered text-center align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for account in accounts %}
+                <tr>
+                    <td>{{ account.first_name }} {{ account.middle_name }} {{ account.last_name }}</td>
+                    <td>{{ account.email }}</td>
+                    <td>
+                        {% if account %}
+                            <span class="badge bg-success">Active</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if account %}
+                            <span class="badge bg-success">Active</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Inactive</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

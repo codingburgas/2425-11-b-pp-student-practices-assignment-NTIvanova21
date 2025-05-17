@@ -1,1 +1,56 @@
 @import url('https://fonts.googleapis.com/css2?family=Kadwa:wght@400;700&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&family=Varela+Round&display=swap');
+.heading{
+    font-family: "Tinos", serif;
+    color: #176B87;
+}
+h3{
+    font-style: italic;
+}
+
+.info-container {
+    max-width: 1200px;
+    height: 80vh;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+
+.info-card-content {
+    font-family: "Tinos", serif;
+    padding: 20px;
+    text-align: center;
+    background-color: #B4D4FF;
+    border-radius: 10px;
+    margin: 6% 3px 0 15px;
+    color: #176B87;
+
+
+}
+
+.info-card-content ol, .info-card-content ul {
+  text-align: left;
+  padding-left: 20px;
+  font-size: 15pt;
+}
+
+h5 {
+    font-weight: 600;
+    font-size: 20pt;
+}
+
+.try-btn{
+    font-family: "Tinos", serif;
+    font-size: 15pt;
+    height: 100%;
+    width: 15%;
+    margin-top: 2%;
+    background-color: #176B87;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+.try-btn:hover{
+    background-color: #1f82a2;
+    color: white;
+}
+
+

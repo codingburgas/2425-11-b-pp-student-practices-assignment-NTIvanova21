@@ -3,3 +3,42 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{{ url_for('main.static', filename='homePageStyle.css') }}">
 {% endblock %}
+
+{% block content %}
+
+    <div class="info-container">
+        <h2 class="text-center heading">Loan Approval Predictor:</h2>
+        <h3 class="text-center heading">Check your loan eligibility instantly using machine learning.</h3>
+        <div class="row justify-content-center">
+            <a href="{{ url_for('main.home') }}" class="btn try-btn">Try it now</a>
+        </div>
+
+
+        <div class="row justify-content-center">
+            <div class="col-md-5 mb-4 info-card-content">
+                <div >
+                    <h5>How it works?</h5>
+                    <ol>
+                      <li>Fill the form with your data</li>
+                      <li>Submit the form</li>
+                      <li>Get your prediction instantly</li>
+                    </ol>
+                </div>
+
+            </div>
+
+            <div class="col-md-5 mb-4 info-card-content info-card g-4">
+                <div >
+                    <h5>Model performance</h5>
+                    <ul>
+                      <li>Model: Logistic Regression</li>
+                      <li>Accuracy: X%</li>
+                      <li>Trained on: Public dataset(link)</li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

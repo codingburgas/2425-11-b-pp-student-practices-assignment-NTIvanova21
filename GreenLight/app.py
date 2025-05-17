@@ -1,5 +1,3 @@
-from flask import render_template
-
 from .config import Config
 from . import create_app
 

@@ -23,8 +23,6 @@ h3{
     border-radius: 10px;
     margin: 6% 3px 0 15px;
     color: #176B87;
-
-
 }
 
 .info-card-content ol, .info-card-content ul {
@@ -53,4 +51,25 @@ h5 {
     color: white;
 }
 
+.activated{
+    background-color: #24D333;
+}
 
+.deactivated{
+    background-color: #D32424;
+}
+
+
+.activated,.deactivated{
+    color: white;
+    border: none;
+    font-family: "Tinos", serif;
+    font-size: 12pt;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    cursor: default;
+    border-radius: 15px;
+}
+
+.role-button{
+    width: 100%;
+}

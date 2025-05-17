@@ -6,14 +6,16 @@
 
 {% block content %}
     <div class="container mt-4">
-        <h2 class="mb-2">Account List</h2>
+        <h2 class="mb-3 heading">Manage accounts</h2>
         <table class="table table-striped table-bordered text-center align-middle">
             <thead class="table-light">
                 <tr>
                     <th>Full Name</th>
                     <th>Email</th>
+                    <th>Role</th>
                     <th>Status</th>
                     <th>Actions</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -22,19 +24,52 @@
                     <td>{{ account.first_name }} {{ account.middle_name }} {{ account.last_name }}</td>
                     <td>{{ account.email }}</td>
                     <td>
-                        {% if account %}
-                            <span class="badge bg-success">Active</span>
+                        <div class="{{ account.role }}">{{ account.role }}</div>
+                    </td>
+                    <td>
+                        {% if account.isActive %}
+                            <div class="activated">Active</div>
+
                         {% else %}
-                            <span class="badge bg-secondary">Inactive</span>
+                            <div class="deactivated">Inactive</div>
+
                         {% endif %}
                     </td>
                     <td>
                         {% if account %}
-                            <span class="badge bg-success">Active</span>
-                        {% else %}
-                            <span class="badge bg-secondary">Inactive</span>
+
+                            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                                <li class="nav-item dropdown d-inline-flex align-items-center">
+
+                                    <button class="btn btn-sm role-button dropdown-toggle d-flex align-items-center"
+                                            type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-person-circle me-1"></i> Account
+                                    </button>
+
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                        <li>
+                                            {% if account.isActive %}
+                                            <form method="POST" action="{{ url_for('main.deactivate_account', userId=account.userId) }}" class="px-3 py-1">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger w-100">Deactivate account</button>
+                                            </form>
+                                            {% else %}
+                                                <form method="POST" action="{{ url_for('main.activate_account', userId=account.userId) }}" class="px-3 py-1">
+                                                    <button type="submit" class="btn btn-sm btn-outline-success w-100">Activate account</button>
+                                                </form>
+
+                                            {% endif %}
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><p style="font-size: 11pt; padding-left: 8px; margin-bottom: 0">Change account's role:</p></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('main.change_role', role = 'admin', userId=account.userId) }}">admin</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('main.change_role', role = 'customer', userId=account.userId) }}">customer</a></li>
+                                    </ul>
+
+                                </li>
+                            </ul>
                         {% endif %}
                     </td>
+
                 </tr>
                 {% endfor %}
             </tbody>

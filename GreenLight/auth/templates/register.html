@@ -1,0 +1,35 @@
+{% extends 'auth_base.html' %}
+
+{% block content %}
+    <div>
+        <h1>Sign up</h1>
+    </div>
+    <form method="POST" action="">
+    {{ form.hidden_tag() }}
+
+    <div class="form-group register">
+        {{ form.first_name(class="form-control", placeholder=form.first_name.label.text|capitalize) }}
+    </div>
+
+    <div class="form-group register">
+        {{ form.middle_name(class="form-control", placeholder=form.middle_name.label.text|capitalize) }}
+    </div>
+
+    <div class="form-group register">
+        {{ form.last_name(class="form-control", placeholder=form.last_name.label.text|capitalize) }}
+    </div>
+
+    <div class="form-group register">
+        {{ form.email(class="form-control", placeholder=form.email.label.text|capitalize) }}
+    </div>
+
+    <div class="form-group register">
+         {{ form.password(class="form-control", placeholder=form.password.label.text|capitalize) }}
+    </div>
+
+    <div class="form-group submit">
+        {{ form.submit(class="btn btn-primary btn-register") }}
+    </div>
+</form>
+{% endblock %}
+

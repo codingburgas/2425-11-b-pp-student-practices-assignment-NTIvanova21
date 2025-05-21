@@ -8,7 +8,7 @@ from .. import login_manager
 
 @main_bp.route('/home')
 def home():
-    return render_template("homePage.html")
+    return render_template("homePage.html", current_user = current_user)
 
 @main_bp.route('/show_accounts', methods=['GET', 'POST'])
 @login_required

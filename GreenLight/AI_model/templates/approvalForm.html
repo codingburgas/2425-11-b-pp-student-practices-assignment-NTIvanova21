@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('AI.static', filename='approvalFormStyle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('AI.static', filename='base_style.css') }}">
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="info-container justify-content-center">
+        <h2 class="text-center heading">Loan Approval Predictor:</h2>
+        <h3 class="text-center heading">Check your loan eligibility instantly using machine learning.</h3>
+
+
+        {% block error %}
+            <div class="error-messages d-flex justify-content-center">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show position-relative" role="alert" style="min-width: 300px;">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="flex-grow-1 text-center">{{ message }}</div>
+                                    <button type="button" class="btn-close " data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+        {% endblock %}
+
+        <div class="form-container">
+            <div class = "form-header">Loan approval form</div>
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+
+                <div class="form-group">
+                <hr>
+                        <label>{{ form.gender.label }}</label><br>
+                        {% for subfield in form.gender %}
+                            <div class="form-check form-check-inline">
+                                {{ subfield(class="form-check-input") }}
+                                <label class="form-check-label">{{ subfield.label.text }}</label>
+                            </div>
+                        {% endfor %}
+                <hr>
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.date_of_birth.label }}</label><br>
+                    {{ form.date_of_birth(class="form-control", type="date") }}
+                </div>
+
+                <div class="form-group">
+                <hr>
+                    <label>{{ form.marital_status.label }}</label><br>
+                    {% for subfield in form.marital_status %}
+                        <div class="form-check form-check-inline">
+                            {{ subfield(class="form-check-input") }}
+                            <label class="form-check-label">{{ subfield.label.text }}</label>
+                        </div>
+                    {% endfor %}
+                <hr>
+                </div>
+
+               <div class="form-group">
+                    <label>{{ form.dependents.label }}</label>
+                    {{ form.dependents(class="form-control") }}
+                    <small class="form-text text-muted">
+                        Include children, spouse, or others who rely on your income.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                <hr>
+                    <label>{{ form.education.label }}</label><br>
+                    {% for subfield in form.education %}
+                        <div class="form-check form-check-inline">
+                            {{ subfield(class="form-check-input") }}
+                            <label class="form-check-label">{{ subfield.label.text }}</label>
+                        </div>
+                    {% endfor %}
+                <hr>
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.self_employment.label }}</label><br>
+                    {% for subfield in form.self_employment %}
+                        <div class="form-check form-check-inline">
+                            {{ subfield(class="form-check-input") }}
+                            <label class="form-check-label">{{ subfield.label.text }}</label>
+                        </div>
+                    {% endfor %}
+                <hr>
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.applicant_income.label }}</label><br>
+                    {{ form.applicant_income(class="form-control", placeholder=form.applicant_income.label.text) }}
+                </div>
+
+                <div class="form-group">
+                    <hr>
+                    <label>{{ form.coapplicant_income.label }}</label><br>
+                    {{ form.coapplicant_income(class="form-control", placeholder=form.coapplicant_income.label.text) }}
+                </div>
+
+                <div class="form-group">
+                    <hr>
+                    <label>{{ form.loan_amount.label }}</label><br>
+                    {{ form.loan_amount(class="form-control", placeholder=form.loan_amount.label.text) }}
+
+                </div>
+
+                <div class="form-group">
+                <hr>
+                    <label>{{ form.loan_term.label }}</label><br>
+                    {% for subfield in form.loan_term %}
+                        <div class="form-check form-check-inline">
+                            {{ subfield(class="form-check-input") }}
+                            <label class="form-check-label">{{ subfield.label.text }}</label>
+                        </div>
+                    {% endfor %}
+                <hr>
+                </div>
+
+                <div class="form-group d-flex justify-content-start gap-2">
+                    <button type="reset" class="btn clear-btn">Clear Form</button>
+                    {{ form.submit(class="btn submit") }}
+
+                </div>
+            </form>
+        </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+

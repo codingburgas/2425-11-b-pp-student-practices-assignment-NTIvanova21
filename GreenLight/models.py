@@ -32,20 +32,21 @@ class Loan(db.Model):
     __table_args__ = {'extend_existing': True}
 
     loanId = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    gender = db.Column(db.String(50))
-    married = db.Column(db.Boolean)
-    dependents = db.Column(db.String(50))
-    education = db.Column(db.String(50))
-    self_employment = db.Column(db.Boolean)
-    applicant_income = db.Column(db.Numeric)
-    coapplicant_income = db.Column(db.Numeric)
-    loan_amount = db.Column(db.Numeric)
-    loan_term = db.Column(db.Integer)
-    age = db.Column(db.Integer)
-    prediction_result = db.Column(db.Boolean)
+    gender = db.Column("Gender", db.String(50))
+    marital_status = db.Column("Married", db.String(50))
+    dependents = db.Column("Dependents", db.String(50))
+    education = db.Column("Education", db.String(80))
+    self_employment = db.Column("SelfEmployment", db.String(80))
+    applicant_income = db.Column("ApplicantIncome", db.Numeric)
+    coapplicant_income = db.Column("CoapplicantIncome", db.Numeric)
+    loan_amount = db.Column("LoanAmount", db.Numeric)
+    loan_term = db.Column("LoanTerm", db.Integer)
+    date_of_birth = db.Column("Age", db.Date)
+    prediction_result = db.Column("PredictionResult", db.Boolean)
 
 
 class UserLoan(db.Model):
     __tablename__ = 'UserLoans'
+    __table_args__ = {'extend_existing': True}
     userId = db.Column(db.Integer, db.ForeignKey('Users.userId'), primary_key=True, nullable=False)
     loanId = db.Column(db.Integer, db.ForeignKey('Loans.loanId'), primary_key=True, nullable=False)

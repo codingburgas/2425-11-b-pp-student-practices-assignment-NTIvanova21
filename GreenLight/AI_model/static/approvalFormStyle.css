@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Kadwa:wght@400;700&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&family=Varela+Round&display=swap');
+a {
+    color: #176B87;
+}
+.heading{
+    font-family: "Tinos", serif;
+    color: #176B87;
+}
+.form-header{
+    font-family: "Tinos", serif;
+    color: #176B87;
+    margin-left: 35%;
+    font-size: 25pt;
+}
+
+.form-container{
+    height: 100%;
+    width: 80%;
+    background-color: #B4D4FF;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px 0 0 10%;
+}
+
+label{
+    font-family: "Tinos", serif;
+    color: #176B87;
+    font-size: 20pt;
+    margin-bottom: 1%;
+}
+.form-check-label{
+    font-size: 15pt;
+}
+hr{
+    border: 1px solid #176B87;
+    margin: 0;
+    padding: 0;
+}
+
+.submit{
+    background-color: #176B87;
+    border: 0;
+}
+.submit:hover{
+    background-color: #1f92b6;
+}
+.clear-btn{
+    background-color: #D32424;
+    margin-left: 70%;
+}
+.clear-btn:hover{
+    background-color: #fa3030;
+}
+.submit, .clear-btn{
+    color: white;
+}

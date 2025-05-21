@@ -43,6 +43,7 @@ hr{
 }
 .submit:hover{
     background-color: #1f92b6;
+    color: white;
 }
 .clear-btn{
     background-color: #D32424;
@@ -50,7 +51,9 @@ hr{
 }
 .clear-btn:hover{
     background-color: #fa3030;
+    color: white;
 }
 .submit, .clear-btn{
     color: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }

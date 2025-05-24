@@ -6,7 +6,7 @@ from models import Loan, UserLoan
 from .logistic_regression_model import features, label_encoders, scaler, model
 from .. import db
 
-from GreenLight import AI_bp
+from . import AI_bp
 from .forms import LoanForm
 
 

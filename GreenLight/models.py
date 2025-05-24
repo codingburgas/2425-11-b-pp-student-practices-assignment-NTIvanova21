@@ -42,7 +42,7 @@ class Loan(db.Model):
     loan_amount = db.Column("LoanAmount", db.Numeric)
     loan_term = db.Column("LoanTerm", db.Integer)
     date_of_birth = db.Column("Age", db.Date)
-    prediction_result = db.Column("PredictionResult", db.Boolean)
+    prediction_result = db.Column("PredictionResult",db.Numeric)
 
 
 class UserLoan(db.Model):

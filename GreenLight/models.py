@@ -15,6 +15,7 @@ class User(db.Model, UserMixin):
     password = db.Column("Password", db.String(255), nullable=False)
     role = db.Column("Role",db.String(50),nullable=True)
     isActive = db.Column("IsActive", db.Boolean, default= False)
+    profilePicture = db.Column("ProfilePicture", db.String(255), default = "default.svg")
 
     def set_password(self, password):
         self.password = generate_password_hash(password)

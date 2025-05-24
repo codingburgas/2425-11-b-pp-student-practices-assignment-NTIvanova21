@@ -7,10 +7,12 @@
     padding: 0;
     font-weight: 700;
     letter-spacing: 1px;
+
 }
 .navbar {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     background-color: #B4D4FF;
+
 }
 .navbar-brand:hover{
     color: #09a3b3;
@@ -43,6 +45,4 @@ body{
     background-color: #EEF5FF;
 }
 
-.fas{
-    font-size: 35px;
-}
+

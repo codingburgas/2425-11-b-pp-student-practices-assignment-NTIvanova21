@@ -19,3 +19,15 @@ def edit_profile(userId):
 
     return render_template("profilePage.html", user=user)
 
+
+@profile_bp.route('/change_profile_picture/<int:userId>/<string:profilePicture>', methods=['GET', 'POST'])
+@login_required
+def change_profile_picture(userId, profilePicture):
+    user = User.query.get(userId)
+    user.profilePicture = profilePicture
+    db.session.commit()
+
+    return redirect(url_for('profile.profile', userId=userId, profilePicture = profilePicture))
+
+
+

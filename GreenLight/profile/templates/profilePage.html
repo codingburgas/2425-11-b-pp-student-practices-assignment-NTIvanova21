@@ -10,10 +10,12 @@
     <div class="container-fluid">
         <div class="row split">
             <div class="col-md-6  text-white d-flex flex-column align-items-center justify-content-center left-part">
-              <i class="fas fa-circle ms-2 profile-picture mb-3"></i>
+              <img class="fas fa-circle ms-2 profile-picture mb-3" src="{{ url_for('profile.static', filename='profile_pictures/{}'.format(user.profilePicture)) }}" alt="Pic2">
+
                 <p class="text-center names">
                     {{ user.first_name }} {{ user.middle_name }} {{ user.last_name }}
                 </p>
+                <a href="#popup" class="open-button mt-2">Change Profile Picture</a>
             </div>
             <div class="col-md-6 text-dark d-flex  justify-content-center right-part" style="background-color: #cce5ff; border-radius: 20px;">
                 <div class="info-box">
@@ -49,6 +51,36 @@
                 <form method="POST" action="{{ url_for('profile.edit_profile', userId = user.userId) }}">
                     <button type="submit" class="btn btn-sm btn-info mt-2">Edit account</button>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <a href="#" class="close">&times;</a>
+            <h4>Select a profile picture:</h4>
+            <div class="image-options">
+                <a href="{{ url_for('profile.change_profile_picture', userId=user.userId, profilePicture='man1.svg') }}">
+                    <img src="{{ url_for('profile.static', filename='profile_pictures/man1.svg') }}" alt="Pic1">
+                </a>
+                <a href="{{ url_for('profile.change_profile_picture', userId=user.userId, profilePicture='man2.svg') }}">
+                    <img src="{{ url_for('profile.static', filename='profile_pictures/man2.svg') }}" alt="Pic2">
+                </a>
+                <a href="{{ url_for('profile.change_profile_picture', userId=user.userId, profilePicture='man3.svg') }}">
+                    <img src="{{ url_for('profile.static', filename='profile_pictures/man3.svg') }}" alt="Pic3">
+                </a>
+
+
+                <a href="{{ url_for('profile.change_profile_picture', userId=user.userId, profilePicture='woman1.svg') }}">
+                    <img src="{{ url_for('profile.static', filename='profile_pictures/woman1.svg') }}" alt="Pic4">
+                </a>
+                <a href="{{ url_for('profile.change_profile_picture', userId=user.userId, profilePicture='woman2.svg') }}">
+                    <img src="{{ url_for('profile.static', filename='profile_pictures/woman2.svg') }}" alt="Pic5">
+                </a>
+                <a href="{{ url_for('profile.change_profile_picture', userId=user.userId, profilePicture='woman3.svg') }}">
+                    <img src="{{ url_for('profile.static', filename='profile_pictures/woman3.svg') }}" alt="Pic6">
+                </a>
+
             </div>
         </div>
     </div>

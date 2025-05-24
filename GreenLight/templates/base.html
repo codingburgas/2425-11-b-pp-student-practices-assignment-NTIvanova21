@@ -11,7 +11,7 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light py-3">
+    <nav class="navbar navbar-expand-lg navbar-light py-2">
         <div class="container">
             <a class="navbar-brand" style="color: #006A71;" href="{{ url_for('main.home') }}">
                 GreenLight
@@ -23,11 +23,13 @@
 
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item dropdown d-inline-flex align-items-center">
+                        <li  class="nav-item dropdown d-inline-flex align-items-center">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-person-circle me-1"></i>{{ current_user.first_name }} {{ current_user.last_name }}
                             </a>
-                            <i class="fas fa-circle ms-2"></i>
+{#                            <i class="fas fa-circle ms-2"></i>#}
+                            <img class="fas fa-circle ms-2 profile-picture" style="width: 70%; height: 70% ;margin:0; padding: 0" src="{{ url_for('profile.static', filename='profile_pictures/{}'.format(current_user.profilePicture)) }}" alt="Pic2">
+
 
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li><a class="dropdown-item" href="{{ url_for('profile.profile', userId = current_user.userId) }}">Profile</a></li>

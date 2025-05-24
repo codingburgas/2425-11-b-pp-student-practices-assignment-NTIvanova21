@@ -53,7 +53,6 @@ class LogisticRegression:
                 self.weights -= self.learning_rate * gradient * np.array(inputs)
                 self.bias -= self.learning_rate * gradient
 
-            print(f"Epoch {epoch+1}/{self.epochs}, Loss = {total_loss:.4f}")
 
 
 df = pd.read_csv("AI_model/model_datasets/train.csv")
@@ -90,5 +89,10 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 model = LogisticRegression(n_inputs=X_train.shape[1], learning_rate=0.1, epochs=500)
 model.train(X_train, y_train)
+
+
+y_pred = [model.predict_class(x) for x in X_test]
+accuracy = np.mean(y_pred == y_test)
+accuracy = round(accuracy, 2) * 100
 
 

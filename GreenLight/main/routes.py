@@ -5,10 +5,10 @@ from .. import db
 from . import main_bp
 from GreenLight.models import User
 from .. import login_manager
-
+from GreenLight.AI_model.logistic_regression_model import accuracy
 @main_bp.route('/home')
 def home():
-    return render_template("homePage.html", current_user = current_user)
+    return render_template("homePage.html", current_user = current_user, accuracy = accuracy)
 
 @main_bp.route('/show_accounts', methods=['GET', 'POST'])
 @login_required

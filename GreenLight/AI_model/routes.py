@@ -41,3 +41,10 @@ def approvalForm(userId):
 
     return render_template('approvalForm.html', form=form)
 
+@AI_bp.route('/approved', methods=['GET', 'POST'])
+def approved():
+    return render_template("approvedLoanPage.html", current_user=current_user)
+
+@AI_bp.route('/disapproved', methods=['GET', 'POST'])
+def disapproved():
+    return render_template("disapprovedLoanPage.html", current_user=current_user)

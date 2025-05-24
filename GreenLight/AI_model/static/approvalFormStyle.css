@@ -57,3 +57,40 @@ hr{
     color: white;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
+
+
+.send-request,.try-again{
+    background-color: #24D333;
+    width: 35%;
+    font-family: "Tinos", serif;
+    color: white;
+    font-size: 15pt;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    margin-top: 2%;
+}
+.send-request:hover{
+    background-color: #20bb2e;
+    color: white;
+}
+
+.try-again{
+    background-color: #D34A24;
+}
+.try-again:hover{
+    background-color: #b0401f;
+    color: white;
+}
+
+.back-btn{
+    background-color: #176B87;
+    width: 20%;
+    font-family: "Tinos", serif;
+    color: white;
+    font-size: 15pt;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    margin-top: 2%;
+}
+.back-btn:hover{
+    background-color: #1b8bab;
+    color: white;
+}

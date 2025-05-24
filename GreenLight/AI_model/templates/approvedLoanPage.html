@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('AI.static', filename='approvalFormStyle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('AI.static', filename='base_style.css') }}">
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="info-container justify-content-center">
+        <h1 class="text-center heading">Congratulations! Your loan is likely to be approved!</h1>
+        <h4 class="text-center heading">Prediction confidence: XX% ✅</h4>
+
+         <div class="row justify-content-center">
+            <a href="{{ url_for('main.home', userId= current_user.userId) }}" class="btn send-request">Send a request for a loan to the bank</a>
+        </div>
+        <div class="row justify-content-center">
+            <a href="{{ url_for('main.home') }}" class="btn back-btn">Back to home</a>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+

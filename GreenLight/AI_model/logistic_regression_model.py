@@ -87,7 +87,7 @@ X = scaler.fit_transform(X)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 
-model = LogisticRegression(n_inputs=X_train.shape[1], learning_rate=0.1, epochs=500)
+model = LogisticRegression(n_inputs=X_train.shape[1], learning_rate=0.001, epochs=10000)
 model.train(X_train, y_train)
 
 

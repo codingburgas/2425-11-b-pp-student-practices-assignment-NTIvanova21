@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('stats.static', filename='statsPageStyle.css') }}">
+<link rel="stylesheet" href="{{ url_for('stats.static', filename='base_style.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/billboard.js/dist/billboard.min.css" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h2>Loans</h2>
+            <div id="donut-chart"></div>
+        </div>
+        <div class="col-md-6 text-center">
+            <h2>Loan Approvals by Education Level</h2>
+            <div id="bar-chart"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/billboard.js/dist/billboard.min.js"></script>
+
+<script>
+    const donutData = {
+        approved: {{ cols.approved }},
+        notApproved: {{ cols.not_approved }},
+        total: {{ cols.approved + cols.not_approved }}
+    };
+
+    const educationData = [
+        {% for ed, data in education.items() %}
+            ["{{ ed }}", {{ data.approved }}, {{ data.not_approved }}],
+        {% endfor %}
+    ];
+</script>
+<script src="{{ url_for('stats.static', filename='stats_charts.js') }}"></script>
+{% endblock %}

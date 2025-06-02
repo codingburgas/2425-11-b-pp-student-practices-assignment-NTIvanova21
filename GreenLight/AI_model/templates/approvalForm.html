@@ -50,11 +50,15 @@
 
                 <div class="form-group">
                     <label>{{ form.date_of_birth.label }}</label><br>
-                    {{ form.date_of_birth(class="form-control", type="date") }}
+                    {{ form.date_of_birth(class="form-control", type="date", max=max_birthdate) }}
+                    <small class="form-text text-muted">
+                       You must be at least 18 years old!
+                    </small>
+                    <hr>
                 </div>
 
                 <div class="form-group">
-                <hr>
+
                     <label>{{ form.marital_status.label }}</label><br>
                     {% for subfield in form.marital_status %}
                         <div class="form-check form-check-inline">
@@ -103,20 +107,20 @@
                 </div>
 
                 <div class="form-group">
-                    <hr>
+
                     <label>{{ form.coapplicant_income.label }}</label><br>
                     {{ form.coapplicant_income(class="form-control", placeholder=form.coapplicant_income.label.text) }}
                 </div>
 
                 <div class="form-group">
-                    <hr>
+
                     <label>{{ form.loan_amount.label }}</label><br>
                     {{ form.loan_amount(class="form-control", placeholder=form.loan_amount.label.text) }}
 
                 </div>
 
                 <div class="form-group">
-                <hr>
+
                     <label>{{ form.loan_term.label }}</label><br>
                     {% for subfield in form.loan_term %}
                         <div class="form-check form-check-inline">
@@ -124,10 +128,11 @@
                             <label class="form-check-label">{{ subfield.label.text }}</label>
                         </div>
                     {% endfor %}
+
                 <hr>
                 </div>
 
-                <div class="form-group d-flex justify-content-start gap-2">
+                <div class="buttons form-group d-flex justify-content-start gap-2">
                     <button type="reset" class="btn clear-btn">Clear Form</button>
                     {{ form.submit(class="btn submit") }}
 

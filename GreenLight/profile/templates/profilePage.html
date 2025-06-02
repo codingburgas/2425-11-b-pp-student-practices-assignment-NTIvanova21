@@ -48,8 +48,8 @@
 
             </div>
             <div class="d-flex justify-content-end">
-                <form method="POST" action="{{ url_for('profile.edit_profile', userId = user.userId) }}">
-                    <button type="submit" class="btn btn-sm btn-info mt-2">Edit account</button>
+                <form method="POST" action="{{ url_for('profile.change_password', userId = user.userId) }}">
+                    <a href="#password-popup" class="open-button mt-2 btn btn-sm btn-info">Change Password</a>
                 </form>
             </div>
         </div>
@@ -84,4 +84,27 @@
             </div>
         </div>
     </div>
+
+    <div id="password-popup" class="popup">
+        <div class="popup-content-password">
+            <a href="#" class="close">&times;</a>
+            <h4>Change Password</h4>
+            <form method="POST" action="{{ url_for('profile.change_password', userId=user.userId) }}">
+                <div class="mb-3 text-start">
+                    <label for="current_password" class="form-label">Current Password</label>
+                    <input type="password" class="form-control" name="current_password" id="current_password" required>
+                </div>
+                <div class="mb-3 text-start">
+                    <label for="new_password" class="form-label">New Password</label>
+                    <input type="password" class="form-control" name="new_password" id="new_password" required>
+                </div>
+                <div class="mb-3 text-start">
+                    <label for="confirm_password" class="form-label">Confirm New Password</label>
+                    <input type="password" class="form-control" name="confirm_password" id="confirm_password" required>
+                </div>
+                <button type="submit" class="btn btn-sm btn-info">Change Password</button>
+            </form>
+        </div>
+    </div>
+
 {% endblock %}

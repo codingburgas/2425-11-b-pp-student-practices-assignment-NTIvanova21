@@ -54,7 +54,6 @@ class LogisticRegression:
                 self.bias -= self.learning_rate * gradient
 
 
-
 df = pd.read_csv("AI_model/model_datasets/train.csv")
 df.fillna({
     'Gender': df['Gender'].mode()[0],
@@ -84,15 +83,14 @@ y = df['Loan_Status'].map({'Y': 1, 'N': 0}).values
 scaler = StandardScaler()
 X = scaler.fit_transform(X)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+model = LogisticRegression(n_inputs=X.shape[1], learning_rate=0.001, epochs=1000)
+model.train(X, y)
 
-model = LogisticRegression(n_inputs=X_train.shape[1], learning_rate=0.001, epochs=10000)
-model.train(X_train, y_train)
-
-
-y_pred = [model.predict_class(x) for x in X_test]
-accuracy = np.mean(y_pred == y_test)
+y_pred = [model.predict_class(x) for x in X]
+accuracy = np.mean(y_pred == y)
 accuracy = round(accuracy, 2) * 100
+
+print(f"Accuracy on the whole dataset: {accuracy}%")
 
 

@@ -44,6 +44,7 @@ def approvalForm(userId):
             db.session.commit()
 
             userLoan = UserLoan(userId=userId, loanId=loan_form.loanId)
+            loan_form.userId = userId
             db.session.add(userLoan)
             db.session.commit()
 

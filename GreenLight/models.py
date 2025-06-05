@@ -33,7 +33,6 @@ class Loan(db.Model):
     __table_args__ = {'extend_existing': True}
 
     loanId = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    userId = db.Column(db.Integer, db.ForeignKey('Users.userId'), nullable=False)
     gender = db.Column("Gender", db.String(50))
     marital_status = db.Column("Married", db.String(50))
     dependents = db.Column("Dependents", db.String(50))
@@ -43,9 +42,11 @@ class Loan(db.Model):
     coapplicant_income = db.Column("CoapplicantIncome", db.Numeric)
     loan_amount = db.Column("LoanAmount", db.Numeric)
     loan_term = db.Column("LoanTerm", db.Integer)
+    credit_history = db.Column("CreditHistory", db.String(50))
+    property_area = db.Column("PropertyArea", db.String(50))
     date_of_birth = db.Column("Age", db.Date)
     prediction_result = db.Column("PredictionResult",db.Numeric)
-    approved = db.Column("Approved", db.Boolean, default=False)
+    approved = db.Column("Approved", db.Boolean, nullable=True)
 
 
 class UserLoan(db.Model):

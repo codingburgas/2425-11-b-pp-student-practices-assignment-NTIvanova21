@@ -10,9 +10,13 @@ class LoanForm(FlaskForm):
     marital_status = RadioField('Marital Status',choices=[('yes', 'Yes'), ('no', 'No')],validators=[InputRequired()],coerce=str)
     dependents = SelectField('Number of Dependents',choices=[('0', '0'), ('1', '1'), ('2', '2'), ('3+', '3 or more')],validators=[InputRequired()])
     education = RadioField('Education',choices=[('Graduate', 'Graduate'), ('Not Graduate', 'Not Graduate')],validators=[InputRequired()],coerce=str, render_kw={"class": "form-check-input"})
-    self_employment = RadioField('Self_employment',choices=[('yes', 'Yes'), ('no', 'No')],validators=[InputRequired()],coerce=str)
+    self_employment = RadioField('Self-employment',choices=[('yes', 'Yes'), ('no', 'No')],validators=[InputRequired()],coerce=str)
     applicant_income = StringField('Applicant Income', validators=[DataRequired()])
     coapplicant_income = StringField('Coapplicant Income', validators=[DataRequired()])
     loan_amount = StringField('Loan Amount', validators=[DataRequired()])
     loan_term = RadioField('Loan Term',choices=[('6', '6 months'),('12', '12 months'),('36', '36 months'),('36', '3 years'),('60', '5 years')],validators=[InputRequired()],coerce=str)
+    credit_history = RadioField('Credit histroty',choices=[('1', 'Good'), ('0', 'Bad')],validators=[InputRequired()],coerce=str)
+    property_area = RadioField('Property area',choices=[('Urban', 'Urban'), ('Semiurban', 'Semiurban'), ('Rural', 'Rural')],validators=[InputRequired()],coerce=str)
+
+
     submit = SubmitField('Check Eligibility')

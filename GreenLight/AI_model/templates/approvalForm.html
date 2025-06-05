@@ -132,6 +132,31 @@
                 <hr>
                 </div>
 
+                <div class="form-group">
+
+                    <label>{{ form.credit_history.label }}</label><br>
+                    {% for subfield in form.credit_history %}
+                        <div class="form-check form-check-inline">
+                            {{ subfield(class="form-check-input") }}
+                            <label class="form-check-label">{{ subfield.label.text }}</label>
+                        </div>
+                    {% endfor %}
+                <hr>
+                </div>
+
+                <div class="form-group">
+
+                    <label>{{ form.property_area.label }}</label><br>
+                    {% for subfield in form.property_area %}
+                        <div class="form-check form-check-inline">
+                            {{ subfield(class="form-check-input") }}
+                            <label class="form-check-label">{{ subfield.label.text }}</label>
+                        </div>
+                    {% endfor %}
+
+                    <hr>
+                </div>
+
                 <div class="buttons form-group d-flex justify-content-start gap-2">
                     <button type="reset" class="btn clear-btn">Clear Form</button>
                     {{ form.submit(class="btn submit") }}

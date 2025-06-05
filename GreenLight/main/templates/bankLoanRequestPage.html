@@ -7,7 +7,8 @@
 
 
 {% block content %}
-    <table class="table table-striped table-bordered text-center align-middle">
+    <div id="container">
+        <table class="table table-striped table-bordered text-center align-middle">
             <thead class="table-light">
                 <tr>
                     <th>Loan ID</th>
@@ -21,6 +22,8 @@
                     <th>Customer's co-applicant income</th>
                     <th>Customer's loan amount</th>
                     <th>Customer's loan term</th>
+                    <th>Customer's credit history</th>
+                    <th>Customer's property area</th>
                     <th>Model's prediction</th>
                     <th>Action</th>
                 </tr>
@@ -39,12 +42,18 @@
                     <td>{{ loan.coapplicant_income }}</td>
                     <td>{{ loan.loan_amount }}</td>
                     <td>{{ loan.loan_term }}</td>
+                    {% if loan.credit_history == 1 %}
+                        <td>Good</td>
+                    {% else %}
+                        <td>Bad</td>
+                    {% endif %}
+                    <td>{{ loan.property_area }}</td>
 
                     <td>{{ loan.prediction_result }}%</td>
 
 
                     <td>
-                        {% if loan.approved == 0 %}
+                        {% if loan.approved == None %}
                             <form method="POST" action="{{ url_for('main.approve_loan_requests', loanId=loan.loanId) }}" class="d-inline">
                                 <button type="submit" class="btn btn-sm btn-outline-warning">Approve</button>
                             </form>
@@ -60,4 +69,5 @@
                 {% endfor %}
             </tbody>
         </table>
+    </div>
 {% endblock %}

@@ -90,3 +90,8 @@ a{
 }
 
 
+#filterButton{
+    font-family: "Tinos", serif;
+    color: #176B87;
+    margin: 20px 0 0 10%;
+}

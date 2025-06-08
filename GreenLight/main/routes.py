@@ -1,6 +1,7 @@
 from flask import render_template, url_for, redirect, flash, request
 from flask_login import login_user, logout_user, current_user, login_required
 
+from models import UserLoan
 from .. import db
 
 from . import main_bp
@@ -61,16 +62,34 @@ def change_role(role, userId):
 @main_bp.route('/loan_requests', methods=['GET', 'POST'])
 @login_required
 def loan_requests():
-    loans = Loan.query.all()
-    return render_template('bankLoanRequestPage.html',current_user = current_user, loans = loans)
+    db.session.expire_all()
+    user_loans = UserLoan.query.all()
+    users_with_loans = []
 
-@main_bp.route('/loan_requests/<int:loanId>', methods=['GET', 'POST'])
+    for user_loan in user_loans:
+        user = User.query.get(user_loan.userId)
+        loan = Loan.query.get(user_loan.loanId)
+        if user and loan:
+            users_with_loans.append({
+                "user": user,
+                "loan": loan
+            })
+
+    return render_template('bankLoanRequestPage.html',current_user=current_user,users_with_loans=users_with_loans)
+@main_bp.route('/loan_requests/approve/<int:loanId>', methods=['GET', 'POST'])
 @login_required
 def approve_loan_requests(loanId):
     loan = Loan.query.get(loanId)
-    loans = Loan.query.all()
     loan.approved = True
     db.session.commit()
 
-    return render_template('bankLoanRequestPage.html',loans = loans)
+    return redirect(url_for('main.loan_requests'))
 
+@main_bp.route('/loan_requests/disapprove/<int:loanId>', methods=['GET', 'POST'])
+@login_required
+def disapprove_loan_requests(loanId):
+    loan = Loan.query.get(loanId)
+    loan.approved = False
+    db.session.commit()
+
+    return redirect(url_for('main.loan_requests'))

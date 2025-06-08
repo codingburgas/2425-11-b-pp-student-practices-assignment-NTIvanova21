@@ -62,6 +62,7 @@
                                         <li><hr class="dropdown-divider"></li>
                                         <li><p style="font-size: 11pt; padding-left: 8px; margin-bottom: 0">Change account's role:</p></li>
                                         <li><a class="dropdown-item" href="{{ url_for('main.change_role', role = 'admin', userId=account.userId) }}">admin</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('main.change_role', role = 'bank', userId=account.userId) }}">bank</a></li>
                                         <li><a class="dropdown-item" href="{{ url_for('main.change_role', role = 'customer', userId=account.userId) }}">customer</a></li>
                                     </ul>
 

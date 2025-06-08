@@ -46,12 +46,15 @@ def deactivate_account(userId):
 def change_role(role, userId):
     if request.method == 'GET':
         user = User.query.get(userId)
-        if user and role in ['admin', 'customer']:
+        if user and role in ['admin', 'customer', 'bank']:
             if role == 'admin':
                 user.role = 'admin'
                 db.session.commit()
             if role == 'customer':
                 user.role = 'customer'
+                db.session.commit()
+            if role == 'bank':
+                user.role = 'bank'
                 db.session.commit()
         else:
             flash('Error')

@@ -41,6 +41,6 @@ def change_password(userId):
 
     user.password = generate_password_hash(new_password)
     db.session.commit()
-    flash("Password updated successfully.", "success")
+    flash("Password was successfully changed!", "success")
     return redirect(url_for('profile.profile', userId=userId))
 

@@ -8,6 +8,22 @@
 
 {% block content %}
     <div class="container-fluid">
+    {% block error %}
+            <div class="error-messages d-flex justify-content-center">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show position-relative" role="alert" style="min-width: 300px;">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="flex-grow-1 text-center">{{ message }}</div>
+                                    <button type="button" class="btn-close " data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+        {% endblock %}
         <div class="row split">
             <div class="col-md-6  text-white d-flex flex-column align-items-center justify-content-center left-part">
               <img class="fas fa-circle ms-2 profile-picture mb-3" src="{{ url_for('profile.static', filename='profile_pictures/{}'.format(user.profilePicture)) }}" alt="Pic2">

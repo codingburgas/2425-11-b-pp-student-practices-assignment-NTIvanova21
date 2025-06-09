@@ -1,6 +1,8 @@
-from flask import render_template, url_for, redirect, flash
+from flask import render_template, url_for, redirect, flash, current_app
 from flask_login import login_user, logout_user, current_user
-from .. import db
+from flask_mail import Message
+
+from .. import db, mail
 
 from . import auth_bp
 from .forms import LoginForm, RegisterForm
@@ -54,7 +56,15 @@ def register():
 
 
         db.session.commit()
-        flash('Account created! You can now log in.', 'success')
+        try:
+            msg = Message(subject='Created account',
+                          body="Your account was successfully created! The admin will soon activate your account! This is automatically generated message. Please, don't reply!",
+                          recipients=[user.email], sender=current_app.config['MAIL_USERNAME'])
+
+            mail.send(msg)
+        except Exception as e:
+            print("Error:", e)
+        flash('Account created! Wait for account activation', 'success')
         return redirect(url_for('auth.login'))
 
     return render_template("register.html", form=form, current_user=current_user, additional_css=url_for('static', filename='auth_base_style.css'))

@@ -1,13 +1,17 @@
-from flask import render_template, url_for, redirect, flash, request
+import os
+
+from flask import render_template, url_for, redirect, flash, request, current_app
 from flask_login import login_user, logout_user, current_user, login_required
+from flask_mail import Message
 
 from models import UserLoan
 from .. import db
 
 from . import main_bp
 from GreenLight.models import User, Loan
-from .. import login_manager
+from .. import login_manager, mail
 from GreenLight.AI_model.logistic_regression_model import accuracy
+
 @main_bp.route('/home')
 def home():
     return render_template("homePage.html", current_user = current_user, accuracy = accuracy)
@@ -24,8 +28,19 @@ def activate_account(userId):
     if request.method == 'POST':
         user = User.query.get(userId)
         if user:
+
             user.isActive = 1
             db.session.commit()
+        try:
+            msg = Message(subject='Activated account',
+                          body="Your account was successfully activated! This is automatically generated message. Please, don't reply!",
+                          recipients=[user.email], sender=current_app.config['MAIL_USERNAME'])
+
+            mail.send(msg)
+            flash("Activation email sent successfully!", "success")
+        except Exception as e:
+            print("Error:", e)
+            flash("Account activated but email could not be sent.", "warning")
 
     return redirect(url_for('main.show_accounts'))
 
@@ -37,6 +52,16 @@ def deactivate_account(userId):
         if user:
             user.isActive = 0
             db.session.commit()
+        try:
+            msg = Message(subject='Deactivated account',
+                          body="Your account was successfully deactivated! This is automatically generated message. Please, don't reply!",
+                          recipients=[user.email], sender=current_app.config['MAIL_USERNAME'])
+
+            mail.send(msg)
+            flash("Activation email sent successfully!", "success")
+        except Exception as e:
+            print("Error:", e)
+            flash("Account activated but email could not be sent.", "warning")
 
     return redirect(url_for('main.show_accounts'))
 
@@ -96,3 +121,4 @@ def disapprove_loan_requests(loanId):
     db.session.commit()
 
     return redirect(url_for('main.loan_requests'))
+

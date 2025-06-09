@@ -1,9 +1,10 @@
-from flask import Flask
+from flask import Flask, render_template, abort
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import migrate, Migrate
 from flask_mail import Mail
+
 
 db = SQLAlchemy()
 bootstrap = Bootstrap()
@@ -35,5 +36,17 @@ def create_app(config):
 
     from .AI_model import AI_bp
     app.register_blueprint(AI_bp)
+
+    @app.errorhandler(404)
+    def not_found_error(error):
+        return render_template('404ErrorPage.html'), 404
+
+    @app.errorhandler(500)
+    def internal_error(error):
+        return render_template('500ErrorPage.html'), 500
+
+    # @app.route('/error-test')
+    # def error_test():
+    #     abort(500)
 
     return app

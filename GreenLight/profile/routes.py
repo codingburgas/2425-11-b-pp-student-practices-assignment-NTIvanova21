@@ -44,3 +44,6 @@ def change_password(userId):
     flash("Password was successfully changed!", "success")
     return redirect(url_for('profile.profile', userId=userId))
 
+
+
+

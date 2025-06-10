@@ -82,12 +82,15 @@
                                     </ul>
                                 </div>
                                 <div class="approve-btns text-end align-center">
+                                    {% if item.loan.approved == False or item.loan.approved == None %}
                                     <form method="POST" action="{{ url_for('main.approve_loan_requests', loanId=item.loan.loanId) }}" class="d-inline">
                                         <button type="submit" class="btn btn-sm btn-success">Approve</button>
                                     </form>
+                                    {% elif item.loan.approved == True %}
                                     <form method="POST" action="{{ url_for('main.disapprove_loan_requests', loanId=item.loan.loanId) }}" class="d-inline">
                                         <button type="submit" class="btn btn-sm btn-danger">Disapprove</button>
                                     </form>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

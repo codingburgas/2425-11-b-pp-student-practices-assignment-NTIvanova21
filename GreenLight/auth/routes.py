@@ -26,13 +26,16 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
             if user.verify_password(form.password.data):
-                login_user(user)
-                if user.role == 'admin':
-                    return redirect(url_for('main.show_accounts'))
-                elif user.role == 'customer':
-                    return redirect(url_for('main.home'))
-                if user.role == 'bank':
-                    return redirect(url_for('main.loan_requests'))
+                if user.isActive:
+                    login_user(user)
+                    if user.role == 'admin':
+                        return redirect(url_for('main.show_accounts'))
+                    elif user.role == 'customer':
+                        return redirect(url_for('main.home'))
+                    if user.role == 'bank':
+                        return redirect(url_for('main.loan_requests'))
+                else:
+                    flash("Your account is not active. Please wait for the administrator to activate it.", category='error')
             else:
                 flash('Invalid password', category='error')
         else:

@@ -27,7 +27,12 @@ def login():
         if user:
             if user.verify_password(form.password.data):
                 login_user(user)
-                return redirect(url_for('main.home'))
+                if user.role == 'admin':
+                    return redirect(url_for('main.show_accounts'))
+                elif user.role == 'customer':
+                    return redirect(url_for('main.home'))
+                if user.role == 'bank':
+                    return redirect(url_for('main.loan_requests'))
             else:
                 flash('Invalid password', category='error')
         else:

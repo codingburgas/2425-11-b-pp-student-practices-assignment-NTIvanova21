@@ -26,6 +26,7 @@
                     <th>Model's prediction</th>
                     <th>Loan status</th>
                     <th>More info</th>
+                    <th>Delete request</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,6 +48,11 @@
                             <button type="button" class="btn btn-sm btn-info text-muted" data-bs-toggle="modal" data-bs-target="#{{ modal_id }}">
                                 View Details
                             </button>
+                        </td>
+                        <td>
+                            <form method="POST" action="{{ url_for('main.delete_loan_requests', loanId=item.loan.loanId) }}" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
                         </td>
                     </tr>
 

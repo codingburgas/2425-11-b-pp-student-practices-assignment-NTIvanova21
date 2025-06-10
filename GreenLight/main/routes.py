@@ -136,5 +136,21 @@ def disapprove_loan_requests(loanId):
     return redirect(url_for('main.loan_requests'))
 
 
+@main_bp.route('/delete_loan_requests/<int:loanId>', methods=['GET', 'POST'])
+@login_required
+def delete_loan_requests(loanId):
+    loan = Loan.query.get(loanId)
+
+    if loan:
+        UserLoan.query.filter_by(loanId=loanId).delete()
+        db.session.delete(loan)
+        db.session.commit()
+
+    return redirect(url_for('main.loan_requests'))
+
+
+
+
+
 
 

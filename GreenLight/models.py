@@ -42,7 +42,7 @@ class Loan(db.Model):
     coapplicant_income = db.Column("CoapplicantIncome", db.Numeric)
     loan_amount = db.Column("LoanAmount", db.Numeric)
     loan_term = db.Column("LoanTerm", db.Integer)
-    credit_history = db.Column("CreditHistory", db.String(50))
+    credit_history = db.Column("CreditHistory", db.Boolean)
     property_area = db.Column("PropertyArea", db.String(50))
     date_of_birth = db.Column("Age", db.Date)
     prediction_result = db.Column("PredictionResult",db.Numeric)

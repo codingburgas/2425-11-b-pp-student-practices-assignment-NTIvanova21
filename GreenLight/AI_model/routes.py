@@ -1,22 +1,16 @@
 from datetime import date
-
 from flask import render_template, url_for, redirect, flash
 from flask_login import current_user
-
-
 from GreenLight.models import Loan, UserLoan
-from .logistic_regression_model import label_encoders, scaler, model, selected_features
 from .. import db
-
 from . import AI_bp
 from .forms import LoanForm
+from .logistic_regression_model import scaler, model, label_encoders, selected_features, accuracy
 
 
 @AI_bp.route('/approvalForm/<int:userId>', methods=['GET', 'POST'])
 def approvalForm(userId):
-
     form = LoanForm()
-
     today = date.today()
     max_birthdate = today.replace(year=today.year - 18)
 
@@ -26,74 +20,79 @@ def approvalForm(userId):
         if date_of_birth > max_birthdate:
             flash("You must be at least 18 years old to apply for a loan.", "danger")
             return render_template('approvalForm.html', form=form, max_birthdate=max_birthdate.strftime('%Y-%m-%d'))
+
+        # Prepare input data according to model requirements
+        input_data = {
+            'Gender': form.gender.data,
+            'Married': form.marital_status.data,
+            'Dependents': form.dependents.data,
+            'Education': form.education.data,
+            'Self_Employed': form.self_employment.data,
+            'ApplicantIncome': float(form.applicant_income.data),
+            'CoapplicantIncome': float(form.coapplicant_income.data),
+            'LoanAmount': float(form.loan_amount.data),
+            'Loan_Amount_Term': float(form.loan_term.data),
+            'Credit_History': float(form.credit_history.data),
+            'Property_Area': form.property_area.data
+        }
+
+        # Process the input data for the model
+        processed_input = []
+        for feature in selected_features:
+            value = input_data[feature]
+            if feature in label_encoders:
+                # Ensure string values are properly formatted
+                if isinstance(value, str):
+                    value = value.title()  # Match training data format
+                value = label_encoders[feature].transform([value])[0]
+            processed_input.append(value)
+
+        # Scale the input
+        scaled_input = scaler.transform([processed_input])
+
+        # Get prediction probability
+        probability = model.predict_proba(scaled_input[0])
+        percentage = round(probability * 100, 2)
+
+        # Save loan application to database
+        loan = Loan(
+            gender=input_data['Gender'],
+            date_of_birth=date_of_birth,
+            marital_status=input_data['Married'],
+            dependents=input_data['Dependents'],
+            education=input_data['Education'],
+            self_employment=input_data['Self_Employed'],
+            applicant_income=input_data['ApplicantIncome'],
+            coapplicant_income=input_data['CoapplicantIncome'],
+            loan_amount=input_data['LoanAmount'],
+            loan_term=input_data['Loan_Amount_Term'],
+            credit_history=input_data['Credit_History'],
+            property_area=input_data['Property_Area'],
+            prediction_result=percentage
+        )
+
+        db.session.add(loan)
+        db.session.commit()
+
+        # Create user-loan relationship if user is logged in
+        if current_user.is_authenticated:
+            user_loan = UserLoan(userId=current_user.id, loanId=loan.loanId)
+            db.session.add(user_loan)
+            db.session.commit()
+
+        # Redirect based on prediction result
+        if percentage >= 50:
+            return redirect(url_for('AI.approved', percentage=percentage))
         else:
-            gender = form.gender.data
+            return redirect(url_for('AI.disapproved', percentage=percentage))
 
-            marital_status = form.marital_status.data
-            dependents = form.dependents.data
-            education = form.education.data
-            self_employment = form.self_employment.data
-            applicant_income = form.applicant_income.data
-            coapplicant_income = form.coapplicant_income.data
-            loan_amount = form.loan_amount.data
-            loan_term = form.loan_term.data
-            credit_history = form.credit_history.data
-            property_area = form.property_area.data
-
-            loan_form = Loan(gender = gender, date_of_birth = date_of_birth,  marital_status = marital_status, dependents = dependents, education = education, self_employment = self_employment, applicant_income = applicant_income, coapplicant_income = coapplicant_income, loan_amount = loan_amount, loan_term = loan_term, credit_history = credit_history, property_area =property_area)
-
-            db.session.add(loan_form)
-            db.session.commit()
-
-            userLoan = UserLoan(userId=userId, loanId=loan_form.loanId)
-            loan_form.userId = userId
-            db.session.add(userLoan)
-            db.session.commit()
-
-            input_dict = {
-                'Gender': gender,
-                'Married': marital_status,
-                'Dependents': dependents,
-                'Education': education,
-                'Self_Employed': self_employment,
-                'ApplicantIncome': float(applicant_income),
-                'CoapplicantIncome': float(coapplicant_income),
-                'LoanAmount': float(loan_amount),
-                'Loan_Amount_Term': float(loan_term),
-                'Credit_History': credit_history,
-                'Property_Area': property_area
-            }
-
-            input_processed = []
-            for feat in selected_features:
-                val = input_dict[feat]
-                if feat in label_encoders:
-                    val = val.title()
-                    val = label_encoders[feat].transform([val])[0]
-                input_processed.append(val)
-
-            input_processed = scaler.transform([input_processed])[0]
-
-            probability = model.predict_probability(input_processed)
-            percentage = round(probability * 100, 2)
-
-            loan_form.prediction_result = percentage
-            db.session.add(loan_form)
-            db.session.commit()
-
-            if percentage >= 50 and percentage <= 100:
-                return redirect(url_for('AI.approved', percentage=percentage))
-            else:
-                return redirect(url_for('AI.disapproved', percentage=percentage))
-
-    return render_template('approvalForm.html', form=form, max_birthdate=max_birthdate.strftime('%Y-%m-%d'))
-
-
+    return render_template('approvalForm.html',
+                         form=form,
+                         max_birthdate=max_birthdate.strftime('%Y-%m-%d'))
 
 @AI_bp.route('/approved/<float:percentage>', methods=['GET', 'POST'])
 def approved(percentage):
     return render_template("approvedLoanPage.html", current_user=current_user, percentage=percentage)
-
 
 @AI_bp.route('/disapproved/<float:percentage>', methods=['GET', 'POST'])
 def disapproved(percentage):

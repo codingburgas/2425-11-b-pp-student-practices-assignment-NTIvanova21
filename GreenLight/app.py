@@ -1,5 +1,5 @@
-from .config import Config
-from . import create_app
+from config import Config
+from greenlight import create_app
 
 app = create_app(Config)
 

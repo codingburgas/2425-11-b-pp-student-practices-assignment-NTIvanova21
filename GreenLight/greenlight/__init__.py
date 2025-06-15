@@ -45,8 +45,8 @@ def create_app(config):
     def internal_error(error):
         return render_template('500ErrorPage.html'), 500
 
-    # @app.route('/error-test')
-    # def error_test():
-    #     abort(500)
+    @app.route('/error-test')
+    def error_test():
+        abort(404)
 
     return app

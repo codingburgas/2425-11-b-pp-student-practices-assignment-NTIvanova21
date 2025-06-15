@@ -5,8 +5,19 @@ from ..models import Loan, UserLoan
 from .. import db
 from . import AI_bp
 from .forms import LoanForm
-from .logistic_regression_model import scaler, model, label_encoders, selected_features, accuracy
 
+
+from .logistic_regression_model import train_and_evaluate_model
+
+
+_model_data = None
+
+def get_model_data():
+    global _model_data
+    if _model_data is None:
+
+        _model_data = train_and_evaluate_model()
+    return _model_data
 
 @AI_bp.route('/approvalForm/<int:userId>', methods=['GET', 'POST'])
 def approvalForm(userId):
@@ -21,7 +32,9 @@ def approvalForm(userId):
             flash("You must be at least 18 years old to apply for a loan.", "danger")
             return render_template('approvalForm.html', form=form, max_birthdate=max_birthdate.strftime('%Y-%m-%d'))
 
-        # Prepare input data according to model requirements
+
+        model, scaler, label_encoders, selected_features, accuracy = get_model_data()
+
         input_data = {
             'Gender': form.gender.data,
             'Married': form.marital_status.data,
@@ -36,25 +49,23 @@ def approvalForm(userId):
             'Property_Area': form.property_area.data
         }
 
-        # Process the input data for the model
+
         processed_input = []
         for feature in selected_features:
             value = input_data[feature]
             if feature in label_encoders:
-                # Ensure string values are properly formatted
                 if isinstance(value, str):
-                    value = value.title()  # Match training data format
+                    value = value.title()
                 value = label_encoders[feature].transform([value])[0]
             processed_input.append(value)
 
-        # Scale the input
         scaled_input = scaler.transform([processed_input])
 
-        # Get prediction probability
+
         probability = model.predict_proba(scaled_input[0])
         percentage = round(probability * 100, 2)
 
-        # Save loan application to database
+
         loan = Loan(
             gender=input_data['Gender'],
             date_of_birth=date_of_birth,
@@ -74,25 +85,26 @@ def approvalForm(userId):
         db.session.add(loan)
         db.session.commit()
 
-        # Create user-loan relationship if user is logged in
         if current_user.is_authenticated:
             user_loan = UserLoan(userId=current_user.id, loanId=loan.loanId)
             db.session.add(user_loan)
             db.session.commit()
 
-        # Redirect based on prediction result
+
         if percentage >= 50:
             return redirect(url_for('AI.approved', percentage=percentage))
         else:
             return redirect(url_for('AI.disapproved', percentage=percentage))
 
     return render_template('approvalForm.html',
-                         form=form,
-                         max_birthdate=max_birthdate.strftime('%Y-%m-%d'))
+                           form=form,
+                           max_birthdate=max_birthdate.strftime('%Y-%m-%d'))
+
 
 @AI_bp.route('/approved/<float:percentage>', methods=['GET', 'POST'])
 def approved(percentage):
     return render_template("approvedLoanPage.html", current_user=current_user, percentage=percentage)
+
 
 @AI_bp.route('/disapproved/<float:percentage>', methods=['GET', 'POST'])
 def disapproved(percentage):

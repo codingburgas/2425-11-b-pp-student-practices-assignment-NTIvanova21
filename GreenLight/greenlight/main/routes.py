@@ -6,7 +6,9 @@ from greenlight.models import UserLoan
 from .. import db
 
 from . import main_bp
-from ..AI_model.logistic_regression_model import accuracy
+from ..AI_model.logistic_regression_model import train_and_evaluate_model
+
+model, scaler, label_encoders, selected_features, accuracy = train_and_evaluate_model()
 from ..models import User, Loan
 from .. import mail
 

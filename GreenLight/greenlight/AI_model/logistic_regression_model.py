@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder, StandardScaler
@@ -47,56 +49,60 @@ class LogisticRegression:
                 print(f"Epoch {epoch}: Loss = {loss:.4f}")
 
 
-df = pd.read_csv("greenlight/AI_model/model_datasets/train.csv")
-df = df.dropna(subset=['Loan_Status'])
+def load_and_prepare_data():
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # directory of logistic_regression_model.py
 
+    data_path = os.path.join(BASE_DIR, 'model_datasets', 'train.csv')
 
-df.fillna({
-    'Gender': df['Gender'].mode()[0],
-    'Married': df['Married'].mode()[0],
-    'Dependents': df['Dependents'].mode()[0],
-    'Self_Employed': df['Self_Employed'].mode()[0],
-    'LoanAmount': df['LoanAmount'].median(),
-    'Loan_Amount_Term': df['Loan_Amount_Term'].mode()[0],
-    'Credit_History': df['Credit_History'].mode()[0],
-}, inplace=True)
+    df = pd.read_csv(data_path)
+    df = df.dropna(subset=['Loan_Status'])
+    df.fillna({
+        'Gender': df['Gender'].mode()[0],
+        'Married': df['Married'].mode()[0],
+        'Dependents': df['Dependents'].mode()[0],
+        'Self_Employed': df['Self_Employed'].mode()[0],
+        'LoanAmount': df['LoanAmount'].median(),
+        'Loan_Amount_Term': df['Loan_Amount_Term'].mode()[0],
+        'Credit_History': df['Credit_History'].mode()[0],
+    }, inplace=True)
 
+    categorical_cols = ['Gender', 'Married', 'Dependents', 'Education', 'Self_Employed', 'Property_Area']
+    label_encoders = {}
+    for col in categorical_cols:
+        le = LabelEncoder()
+        df[col] = le.fit_transform(df[col])
+        label_encoders[col] = le
 
-categorical_cols = ['Gender', 'Married', 'Dependents', 'Education', 'Self_Employed', 'Property_Area']
-label_encoders = {}
-for col in categorical_cols:
-    le = LabelEncoder()
-    df[col] = le.fit_transform(df[col])
-    label_encoders[col] = le
+    features = ['Gender', 'Married', 'Dependents', 'Education', 'Self_Employed',
+                'ApplicantIncome', 'CoapplicantIncome', 'LoanAmount', 'Loan_Amount_Term',
+                'Credit_History', 'Property_Area']
+    selected_features = features
+    X = df[features].values
+    y = df['Loan_Status'].map({'Y': 1, 'N': 0}).values
 
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
 
-features = ['Gender', 'Married', 'Dependents', 'Education', 'Self_Employed',
-            'ApplicantIncome', 'CoapplicantIncome', 'LoanAmount', 'Loan_Amount_Term',
-            'Credit_History', 'Property_Area']
-selected_features = features
-X = df[features].values
-y = df['Loan_Status'].map({'Y': 1, 'N': 0}).values
+    return X_scaled, y, scaler, label_encoders, selected_features
 
+def train_and_evaluate_model():
+    X, y, scaler, label_encoders, selected_features = load_and_prepare_data()
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, stratify=y, random_state=42
+    )
 
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
+    model = LogisticRegression(n_inputs=X_train.shape[1], learning_rate=0.01, threshold=0.4)
+    model.train(X_train, y_train, epochs=2000)
 
+    y_pred = [model.predict_class(x) for x in X_test]
+    accuracy = round(accuracy_score(y_test, y_pred),2) * 100
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X_scaled, y, test_size=0.2, stratify=y, random_state=42
-)
+    print(f"Accuracy : {accuracy_score(y_test, y_pred):.2f}")
+    print(f"Precision: {precision_score(y_test, y_pred):.2f}")
+    print(f"Recall   : {recall_score(y_test, y_pred):.2f}")
+    print(f"F1 Score : {f1_score(y_test, y_pred):.2f}")
+    print("\nConfusion Matrix:\n", confusion_matrix(y_test, y_pred))
+    print("\nClassification Report:\n", classification_report(y_test, y_pred))
 
+    return model, scaler, label_encoders, selected_features, accuracy
 
-model = LogisticRegression(n_inputs=X_train.shape[1], learning_rate=0.01, threshold=0.4)
-model.train(X_train, y_train, epochs=2000)
-
-
-y_pred = [model.predict_class(x) for x in X_test]
-accuracy = round(accuracy_score(y_test, y_pred),2) * 100
-
-print(f"Accuracy : {accuracy_score(y_test, y_pred):.2f}")
-print(f"Precision: {precision_score(y_test, y_pred):.2f}")
-print(f"Recall   : {recall_score(y_test, y_pred):.2f}")
-print(f"F1 Score : {f1_score(y_test, y_pred):.2f}")
-print("\nConfusion Matrix:\n", confusion_matrix(y_test, y_pred))
-print("\nClassification Report:\n", classification_report(y_test, y_pred))

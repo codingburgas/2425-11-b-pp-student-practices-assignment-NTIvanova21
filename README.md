@@ -48,3 +48,36 @@ flask run
 ```
 
 <hr>
+
+
+# 💻 Used Technologies
+### Used code editor & collaborative service: 
+<p align="left">
+  <p>
+    <img src="https://cdn.worldvectorlogo.com/logos/jetbrains-pycharm.svg" alt="Pycharm" width=48px>
+    <img src="https://cdn.worldvectorlogo.com/logos/github-icon-2.svg" alt="GitHub logo" width=48px>
+    <img src="https://cdn.worldvectorlogo.com/logos/git-bash.svg" alt="Git" width=48px>
+  </p>
+</p>
+
+### Used tools for visual elements:
+<p align="left">
+    <img src="https://cdn.worldvectorlogo.com/logos/html-1.svg" alt="HTML" width=48px>
+    <img src="https://cdn.worldvectorlogo.com/logos/css-3.svg" alt="CSS" width=48px>
+    <img src="https://cdn.worldvectorlogo.com/logos/bootstrap-5-1.svg" alt="Bootstrap" width=60px height = 60px>
+</p>
+
+### Used technologies for project development:
+<p align="left">
+    <p>
+    <img src="https://cdn.worldvectorlogo.com/logos/python-5.svg" alt="Python" width=48px>
+    <img src="https://cdn.worldvectorlogo.com/logos/flask.svg" alt = "Flask" width = 35px>
+    </p>
+</p>
+
+### Used technologies for project's database:
+<p align="left">
+    <p>
+    <img src="https://cdn.worldvectorlogo.com/logos/microsoft-sql-server-1.svg" alt="SQL" width=60px>
+    </p>
+</p>

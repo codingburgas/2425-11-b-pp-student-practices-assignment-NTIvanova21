@@ -1,5 +1,4 @@
 import unittest
-from flask_login import login_user
 from greenlight import create_app, db
 from greenlight.models import User, UserLoan, Loan
 

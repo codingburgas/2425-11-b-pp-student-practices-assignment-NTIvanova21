@@ -1,4 +1,4 @@
-from flask import render_template, url_for, redirect, flash, request
+from flask import render_template, url_for, redirect, flash, request, abort
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -11,12 +11,16 @@ from .. import login_manager
 @profile_bp.route('/profile/<int:userId>', methods=['GET', 'POST'])
 @login_required
 def profile(userId):
+    if current_user.userId != userId:
+        abort(500)
     user = User.query.get(userId)
     return render_template("profilePage.html", user=user)
 
 @profile_bp.route('/change_profile_picture/<int:userId>/<string:profilePicture>', methods=['GET', 'POST'])
 @login_required
 def change_profile_picture(userId, profilePicture):
+    if current_user.userId != userId:
+        abort(500)
     user = User.query.get(userId)
     user.profilePicture = profilePicture
     db.session.commit()
@@ -26,6 +30,9 @@ def change_profile_picture(userId, profilePicture):
 @profile_bp.route('/change_password/<int:userId>', methods=['POST'])
 @login_required
 def change_password(userId):
+    if current_user.userId != userId:
+        abort(500)
+
     user = User.query.get(userId)
     current_password = request.form.get('current_password')
     new_password = request.form.get('new_password')

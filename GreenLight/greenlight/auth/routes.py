@@ -15,9 +15,21 @@ from ..models import User
 
 @auth_bp.route('/')
 def index():
+    """
+        Redirect root route to login page.
+    """
     return redirect(url_for('auth.login'))
 @login_manager.user_loader
 def load_user(userId):
+    """
+        Flask-Login user loader callback.
+
+        Args:
+            userId (int): User ID stored in the session
+
+        Returns:
+            User object or None
+    """
     return User.query.get(int(userId))
 
 
@@ -30,6 +42,7 @@ def login():
             if user.verify_password(form.password.data):
                 if user.isActive:
                     login_user(user)
+                    # Redirect based on user role
                     if user.role == 'admin':
                         return redirect(url_for('main.show_accounts'))
                     elif user.role == 'customer':
@@ -46,12 +59,27 @@ def login():
     return render_template('login.html', form=form, additional_css=url_for('static', filename='auth_base_style.css'))
 @auth_bp.route('/logout', methods=['GET', 'POST'])
 def logout():
+    """
+        Log the user out and redirect to login page.
+    """
     logout_user()
     return redirect(url_for('auth.login'))
 
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
+    """
+        Handle new user registration.
+
+        - Validates registration form
+        - Prevents duplicate emails
+        - Hashes password and stores new user in DB
+        - Sends confirmation email
+        - Redirects to login page after successful registration
+
+        Returns:
+            Rendered template or redirect response
+    """
     form = RegisterForm()
     if form.validate_on_submit():
         existing_user = User.query.filter_by(email=form.email.data).first()
@@ -59,6 +87,7 @@ def register():
             flash('That username is already taken. Please choose another', "error")
             return redirect(url_for('auth.register'))
         else:
+            # Create new user object
             user = User(first_name=form.first_name.data, middle_name=form.middle_name.data, last_name=form.last_name.data, email=form.email.data)
             user.set_password(form.password.data)
             db.session.add(user)
@@ -66,6 +95,8 @@ def register():
 
 
         db.session.commit()
+
+        # Attempt to send confirmation email
         try:
             msg = Message(subject='Created account',
                           body="Your account was successfully created! The admin will soon activate your account! This is automatically generated message. Please, don't reply!",

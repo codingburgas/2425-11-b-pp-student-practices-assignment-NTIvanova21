@@ -15,17 +15,26 @@ from .. import mail
 
 @main_bp.route('/home')
 def home():
+    """
+        Render the home page, passing the model's accuracy for display.
+    """
     return render_template("homePage.html", current_user = current_user, accuracy = accuracy)
 
 @main_bp.route('/show_accounts', methods=['GET', 'POST'])
 @login_required
 def show_accounts():
+    """
+        Admin view to list all registered user accounts.
+    """
     all_accounts = User.query.all()
     return render_template("adminPage.html", accounts=all_accounts)
 
 @main_bp.route('/activate_account/<int:userId>', methods=['GET', 'POST'])
 @login_required
 def activate_account(userId):
+    """
+        Activate a user account by setting isActive = 1 and send email notification.
+    """
     if request.method == 'POST':
         user = User.query.get(userId)
         if user:
@@ -48,6 +57,9 @@ def activate_account(userId):
 @main_bp.route('/deactivate_account/<int:userId>', methods=['GET', 'POST'])
 @login_required
 def deactivate_account(userId):
+    """
+        Deactivate a user account by setting isActive = 0 and send email notification.
+    """
     if request.method == 'POST':
         user = User.query.get(userId)
         if user:
@@ -70,6 +82,9 @@ def deactivate_account(userId):
 @main_bp.route('/change_role/<string:role>/<int:userId>', methods=['GET', 'POST'])
 @login_required
 def change_role(role, userId):
+    """
+        Change the role of a user to one of: 'admin', 'customer', or 'bank'.
+    """
     if request.method == 'GET':
         user = User.query.get(userId)
         if user and role in ['admin', 'customer', 'bank']:
@@ -92,6 +107,9 @@ def change_role(role, userId):
 @main_bp.route('/delete_account/<int:userId>', methods=['GET', 'POST'])
 @login_required
 def delete_account(userId):
+    """
+        Permanently delete a user and their associated loans.
+    """
     user = User.query.get(userId)
     user_loans = UserLoan.query.all()
     db.session.delete(user)
@@ -104,6 +122,9 @@ def delete_account(userId):
 @main_bp.route('/loan_requests', methods=['GET', 'POST'])
 @login_required
 def loan_requests():
+    """
+        Bank role view to see all loan requests and the users who submitted them.
+    """
     db.session.expire_all()
     user_loans = UserLoan.query.all()
     users_with_loans = []
@@ -121,6 +142,9 @@ def loan_requests():
 @main_bp.route('/loan_requests/approve/<int:loanId>', methods=['GET', 'POST'])
 @login_required
 def approve_loan_requests(loanId):
+    """
+        Mark a loan request as approved (sets loan.approved = True).
+    """
     loan = Loan.query.get(loanId)
     loan.approved = True
     db.session.commit()
@@ -130,6 +154,9 @@ def approve_loan_requests(loanId):
 @main_bp.route('/loan_requests/disapprove/<int:loanId>', methods=['GET', 'POST'])
 @login_required
 def disapprove_loan_requests(loanId):
+    """
+        Mark a loan request as disapproved (sets loan.approved = False).
+    """
     loan = Loan.query.get(loanId)
     loan.approved = False
     db.session.commit()
@@ -140,6 +167,9 @@ def disapprove_loan_requests(loanId):
 @main_bp.route('/delete_loan_requests/<int:loanId>', methods=['GET', 'POST'])
 @login_required
 def delete_loan_requests(loanId):
+    """
+        Delete a loan and its associated UserLoan relationship.
+    """
     loan = Loan.query.get(loanId)
 
     if loan:

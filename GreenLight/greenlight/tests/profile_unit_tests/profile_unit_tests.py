@@ -4,7 +4,7 @@ from flask import url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from greenlight import create_app, db
-from greenlight.models import User, UserLoan, Loan
+from greenlight.models import User
 
 class TestConfig:
     TESTING = True
@@ -17,13 +17,17 @@ class TestConfig:
     PREFERRED_URL_SCHEME = 'http'
 
 class ProfileRoutesTestCase(unittest.TestCase):
+    """Unit tests for the profile-related routes."""
+
     def setUp(self):
+        """Set up test client, app context, and test user."""
         self.app = create_app(TestConfig)
         self.app_context = self.app.app_context()
         self.app_context.push()
         db.create_all()
         self.client = self.app.test_client()
 
+        # Create test user and log in
         self.test_user = User(
             userId=1,
             first_name='Test',
@@ -46,11 +50,13 @@ class ProfileRoutesTestCase(unittest.TestCase):
             self.assertEqual(response.status_code, 200)
 
     def tearDown(self):
+        """Clean up database after each test."""
         db.session.remove()
         db.drop_all()
         self.app_context.pop()
 
     def test_profile_page(self):
+        """Test that the profile page displays correctly."""
         with self.app.test_request_context():
             url = url_for('profile.profile', userId=1)
 
@@ -60,6 +66,8 @@ class ProfileRoutesTestCase(unittest.TestCase):
         self.assertIn(b'Test User', response.data)
 
     def test_profile_page_unauthorized_access(self):
+        """Test that accessing another user's profile is forbidden."""
+
         # Create another user
         another_user = User(
             userId=2,
@@ -80,6 +88,8 @@ class ProfileRoutesTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_change_profile_picture(self):
+        """Test successfully changing the profile picture."""
+
         response = self.client.get(
             url_for('profile.change_profile_picture',
                    userId=1,
@@ -91,6 +101,7 @@ class ProfileRoutesTestCase(unittest.TestCase):
         self.assertEqual(updated_user.profilePicture, 'new_picture.jpg')
 
     def test_change_profile_picture_unauthorized(self):
+        """Test that users cannot change another user's profile picture."""
         another_user = User(
             userId=2,
             email='another@example.com',
@@ -111,6 +122,7 @@ class ProfileRoutesTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_change_password_success(self):
+        """Test successful password change."""
         response = self.client.post(
             url_for('profile.change_password', userId=1),
             data={
@@ -126,6 +138,7 @@ class ProfileRoutesTestCase(unittest.TestCase):
         self.assertIn(b'Password was successfully changed!', response.data)
 
     def test_change_password_wrong_current_password(self):
+        """Test password change fails when current password is incorrect."""
         response = self.client.post(
             url_for('profile.change_password', userId=1),
             data={
@@ -139,6 +152,7 @@ class ProfileRoutesTestCase(unittest.TestCase):
         self.assertIn(b'Current password is incorrect.', response.data)
 
     def test_change_password_mismatch_new_passwords(self):
+        """Test password change fails when new passwords do not match."""
         response = self.client.post(
             url_for('profile.change_password', userId=1),
             data={
@@ -152,6 +166,7 @@ class ProfileRoutesTestCase(unittest.TestCase):
         self.assertIn(b'New passwords do not match.', response.data)
 
     def test_change_password_unauthorized(self):
+        """Test that a user cannot change another user's password."""
         another_user = User(
             userId=2,
             email='another@example.com',

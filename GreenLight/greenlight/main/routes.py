@@ -110,14 +110,13 @@ def delete_account(userId):
     """
         Permanently delete a user and their associated loans.
     """
+    UserLoan.query.filter_by(userId=userId).delete()
+
     user = User.query.get(userId)
-    user_loans = UserLoan.query.all()
-    db.session.delete(user)
+    if user:
+        db.session.delete(user)
 
-    if userId in user_loans:
-        user_loans.delete(userId)
     db.session.commit()
-
     return redirect(url_for('main.show_accounts'))
 @main_bp.route('/loan_requests', methods=['GET', 'POST'])
 @login_required

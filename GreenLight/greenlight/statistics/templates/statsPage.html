@@ -7,22 +7,63 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6 text-center">
-            <h2>Loans</h2>
-            <div id="donut-chart"></div>
+<div class="container py-4">
+    <!-- Charts Section -->
+    <div class="stats-card shadow-lg rounded-4 p-4 bg-white mb-4">
+        <div class="row g-4 justify-content-center align-items-stretch">
+            <div class="col-lg-6 col-md-12 d-flex flex-column align-items-center justify-content-center mb-4 mb-lg-0">
+                <h2 class="stats-title mb-4"><i class="fas fa-chart-pie me-2"></i>Loans Overview</h2>
+                <div id="donut-chart" class="chart-container mb-3"></div>
+            </div>
+            <div class="col-lg-6 col-md-12 d-flex flex-column align-items-center justify-content-center">
+                <h2 class="stats-title mb-4"><i class="fas fa-graduation-cap me-2"></i>Approvals by Education</h2>
+                <div id="bar-chart" class="chart-container"></div>
+            </div>
         </div>
-        <div class="col-md-6 text-center">
-            <h2>Loan Approvals by Education Level</h2>
-            <div id="bar-chart"></div>
+    </div>
+
+    <!-- Summary Statistics Section -->
+    <div class="stats-card shadow-lg rounded-4 p-4 bg-white">
+        <h2 class="stats-title mb-4"><i class="fas fa-chart-line me-2"></i>Summary Statistics</h2>
+        <div class="row g-4">
+            <div class="col-md-3 col-sm-6">
+                <div class="summary-card text-center p-3">
+                    <i class="fas fa-file-alt summary-icon mb-2"></i>
+                    <h3 class="summary-title">Total Requests</h3>
+                    <p class="summary-value">{{ cols.approved + cols.not_approved }}</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="summary-card text-center p-3">
+                    <i class="fas fa-check-circle summary-icon mb-2"></i>
+                    <h3 class="summary-title">Approved</h3>
+                    <p class="summary-value">{{ cols.approved }}</p>
+                    <small class="summary-percentage">({{ "%.1f"|format(cols.approved / (cols.approved + cols.not_approved) * 100) }}%)</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="summary-card text-center p-3">
+                    <i class="fas fa-times-circle summary-icon mb-2"></i>
+                    <h3 class="summary-title">Not Approved</h3>
+                    <p class="summary-value">{{ cols.not_approved }}</p>
+                    <small class="summary-percentage">({{ "%.1f"|format(cols.not_approved / (cols.approved + cols.not_approved) * 100) }}%)</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="summary-card text-center p-3">
+                    <i class="fas fa-graduation-cap summary-icon mb-2"></i>
+                    <h3 class="summary-title">Education Types</h3>
+                    <p class="summary-value">{{ education|length }}</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block extra_js %}
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/billboard.js/dist/billboard.min.js"></script>
-
 <script>
     const donutData = {
         approved: {{ cols.approved }},

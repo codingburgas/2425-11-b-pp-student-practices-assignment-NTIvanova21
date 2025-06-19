@@ -1,172 +1,183 @@
 {% extends 'base.html' %}
 
 {% block extra_css %}
-
     <link rel="stylesheet" href="{{ url_for('AI.static', filename='approvalFormStyle.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='base_style.css') }}">
 {% endblock %}
 
 {% block content %}
+<div class="form-header-section text-center">
+    <h1 class="main-title">Loan Approval Predictor</h1>
+    <p class="subtitle">Check your loan eligibility instantly using our AI-powered system</p>
+</div>
 
-
-    <div class="info-container justify-content-center">
-        <h2 class="text-center heading">Loan Approval Predictor:</h2>
-        <h3 class="text-center heading">Check your loan eligibility instantly using machine learning.</h3>
-
-
-        {% block error %}
-            <div class="error-messages d-flex justify-content-center">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }} alert-dismissible fade show position-relative" role="alert" style="min-width: 300px;">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="flex-grow-1 text-center">{{ message }}</div>
-                                    <button type="button" class="btn-close " data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-            </div>
-        {% endblock %}
-
-        <div class="form-container">
-            <div class = "form-header">Loan approval form</div>
-            <form method="POST" action="">
-                {{ form.hidden_tag() }}
-
-                <div class="form-group">
-                <hr>
-                        <label>{{ form.gender.label }}</label><br>
-                        {% for subfield in form.gender %}
-                            <div class="form-check form-check-inline">
-                                {{ subfield(class="form-check-input") }}
-                                <label class="form-check-label">{{ subfield.label.text }}</label>
-                            </div>
-                        {% endfor %}
-                <hr>
-                </div>
-
-                <div class="form-group">
-                    <label>{{ form.date_of_birth.label }}</label><br>
-                    {{ form.date_of_birth(class="form-control", type="date", max=max_birthdate) }}
-                    <small class="form-text text-muted">
-                       You must be at least 18 years old!
-                    </small>
-                    <hr>
-                </div>
-
-                <div class="form-group">
-
-                    <label>{{ form.marital_status.label }}</label><br>
-                    {% for subfield in form.marital_status %}
-                        <div class="form-check form-check-inline">
-                            {{ subfield(class="form-check-input") }}
-                            <label class="form-check-label">{{ subfield.label.text }}</label>
+{% block error %}
+    <div class="error-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        <div class="alert-content">
+                            <i class="fas fa-info-circle alert-icon"></i>
+                            <span>{{ message }}</span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                    {% endfor %}
-                <hr>
-                </div>
-
-               <div class="form-group">
-                    <label>{{ form.dependents.label }}</label>
-                    {{ form.dependents(class="form-control") }}
-                    <small class="form-text text-muted">
-                        Include children, spouse, or others who rely on your income.
-                    </small>
-                </div>
-
-
-                <div class="form-group">
-                <hr>
-                    <label>{{ form.education.label }}</label><br>
-                    {% for subfield in form.education %}
-                        <div class="form-check form-check-inline">
-                            {{ subfield(class="form-check-input") }}
-                            <label class="form-check-label">{{ subfield.label.text }}</label>
-                        </div>
-                    {% endfor %}
-                <hr>
-                </div>
-
-                <div class="form-group">
-                    <label>{{ form.self_employment.label }}</label><br>
-                    {% for subfield in form.self_employment %}
-                        <div class="form-check form-check-inline">
-                            {{ subfield(class="form-check-input") }}
-                            <label class="form-check-label">{{ subfield.label.text }}</label>
-                        </div>
-                    {% endfor %}
-                <hr>
-                </div>
-
-                <div class="form-group">
-                    <label>{{ form.applicant_income.label }}</label><br>
-                    {{ form.applicant_income(class="form-control", placeholder=form.applicant_income.label.text + ' in €') }}
-                </div>
-
-                <div class="form-group">
-
-                    <label>{{ form.coapplicant_income.label }}</label><br>
-                    {{ form.coapplicant_income(class="form-control", placeholder=form.coapplicant_income.label.text + ' in €') }}
-                </div>
-
-                <div class="form-group">
-
-                    <label>{{ form.loan_amount.label }}</label><br>
-                    {{ form.loan_amount(class="form-control", placeholder=form.loan_amount.label.text + ' in €') }}
-
-                </div>
-
-                <div class="form-group">
-
-                    <label>{{ form.loan_term.label }}</label><br>
-                    {% for subfield in form.loan_term %}
-                        <div class="form-check form-check-inline">
-                            {{ subfield(class="form-check-input") }}
-                            <label class="form-check-label">{{ subfield.label.text }}</label>
-                        </div>
-                    {% endfor %}
-
-                <hr>
-                </div>
-
-                <div class="form-group">
-
-                    <label>{{ form.credit_history.label }}</label><br>
-                    {% for subfield in form.credit_history %}
-                        <div class="form-check form-check-inline">
-                            {{ subfield(class="form-check-input") }}
-                            <label class="form-check-label">{{ subfield.label.text }}</label>
-                        </div>
-                    {% endfor %}
-                <hr>
-                </div>
-
-                <div class="form-group">
-
-                    <label>{{ form.property_area.label }}</label><br>
-                    {% for subfield in form.property_area %}
-                        <div class="form-check form-check-inline">
-                            {{ subfield(class="form-check-input") }}
-                            <label class="form-check-label">{{ subfield.label.text }}</label>
-                        </div>
-                    {% endfor %}
-
-                    <hr>
-                </div>
-
-                <div class="buttons form-group d-flex justify-content-start gap-2">
-                    <button type="reset" class="btn clear-btn">Clear Form</button>
-                    {{ form.submit(class="btn submit") }}
-
-                </div>
-            </form>
-        </div>
-
-        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
     </div>
+{% endblock %}
+
+<div class="form-container">
+    <form method="POST" action="" class="loan-form">
+        {{ form.hidden_tag() }}
+        
+        <div class="form-section" id="personal-info">
+            <h2 class="section-title">Personal Information</h2>
+            
+            <div class="form-group">
+                <label class="form-label">{{ form.gender.label }}</label>
+                <div class="radio-group">
+                    {% for subfield in form.gender %}
+                        <div class="radio-option">
+                            {{ subfield(class="form-check-input") }}
+                            <label class="radio-label">{{ subfield.label.text }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">{{ form.date_of_birth.label }}</label>
+                {{ form.date_of_birth(class="form-control custom-input", type="date", max=max_birthdate) }}
+                <small class="helper-text">
+                    <i class="fas fa-info-circle"></i> You must be at least 18 years old
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">{{ form.marital_status.label }}</label>
+                <div class="radio-group">
+                    {% for subfield in form.marital_status %}
+                        <div class="radio-option">
+                            {{ subfield(class="form-check-input") }}
+                            <label class="radio-label">{{ subfield.label.text }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">{{ form.dependents.label }}</label>
+                {{ form.dependents(class="form-control custom-input") }}
+                <small class="helper-text">
+                    <i class="fas fa-info-circle"></i> Include children, spouse, or others who rely on your income
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">{{ form.education.label }}</label>
+                <div class="radio-group">
+                    {% for subfield in form.education %}
+                        <div class="radio-option">
+                            {{ subfield(class="form-check-input") }}
+                            <label class="radio-label">{{ subfield.label.text }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section" id="financial-info">
+            <h2 class="section-title">Financial Information</h2>
+            
+            <div class="form-group">
+                <label class="form-label">{{ form.self_employment.label }}</label>
+                <div class="radio-group">
+                    {% for subfield in form.self_employment %}
+                        <div class="radio-option">
+                            {{ subfield(class="form-check-input") }}
+                            <label class="radio-label">{{ subfield.label.text }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">{{ form.applicant_income.label }}</label>
+                <div class="input-group">
+                    <span class="input-group-text">€</span>
+                    {{ form.applicant_income(class="form-control custom-input", placeholder="Enter amount") }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">{{ form.coapplicant_income.label }}</label>
+                <div class="input-group">
+                    <span class="input-group-text">€</span>
+                    {{ form.coapplicant_income(class="form-control custom-input", placeholder="Enter amount") }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">{{ form.credit_history.label }}</label>
+                <div class="radio-group">
+                    {% for subfield in form.credit_history %}
+                        <div class="radio-option">
+                            {{ subfield(class="form-check-input") }}
+                            <label class="radio-label">{{ subfield.label.text }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section" id="loan-info">
+            <h2 class="section-title">Loan Details</h2>
+            
+            <div class="form-group">
+                <label class="form-label">{{ form.loan_amount.label }}</label>
+                <div class="input-group">
+                    <span class="input-group-text">€</span>
+                    {{ form.loan_amount(class="form-control custom-input", placeholder="Enter amount") }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">{{ form.loan_term.label }}</label>
+                <div class="radio-group">
+                    {% for subfield in form.loan_term %}
+                        <div class="radio-option">
+                            {{ subfield(class="form-check-input") }}
+                            <label class="radio-label">{{ subfield.label.text }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">{{ form.property_area.label }}</label>
+                <div class="radio-group">
+                    {% for subfield in form.property_area %}
+                        <div class="radio-option">
+                            {{ subfield(class="form-check-input") }}
+                            <label class="radio-label">{{ subfield.label.text }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="reset" class="btn clear-btn">
+                <i class="fas fa-undo"></i> Clear Form
+            </button>
+            {{ form.submit(class="btn submit-btn") }}
+        </div>
+    </form>
+</div>
+
 {% endblock %}
 
 

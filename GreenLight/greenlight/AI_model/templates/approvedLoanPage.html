@@ -1,23 +1,76 @@
 {% extends 'base.html' %}
 
 {% block extra_css %}
-
     <link rel="stylesheet" href="{{ url_for('AI.static', filename='approvalFormStyle.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='base_style.css') }}">
 {% endblock %}
 
 {% block content %}
+<div class="result-page approved">
+    <div class="result-container">
+        <div class="result-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        
+        <div class="result-content">
+            <h1 class="result-title">Congratulations!</h1>
+            <p class="result-subtitle">Your loan application has a high chance of approval</p>
+            
+            <div class="confidence-meter">
+                <div class="confidence-label">
+                    <span>Prediction Confidence</span>
+                    <span class="confidence-value">{{ percentage }}%</span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: {{ percentage }}%"></div>
+                </div>
+            </div>
 
+            <div class="info-cards">
+                <div class="info-card">
+                    <div class="card-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>What's Next?</h3>
+                        <p>Our AI model predicts a positive outcome for your loan application. Here are your next steps:</p>
+                        <ul class="next-steps">
+                            <li>
+                                <i class="fas fa-file-alt"></i>
+                                <span>Gather required documentation (ID, proof of income, etc.)</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-bank"></i>
+                                <span>Visit your preferred bank with your application reference</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-handshake"></i>
+                                <span>Complete the formal application process</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
-    <div class="info-container justify-content-center">
-        <h1 class="text-center heading">Congratulations! Your loan is likely to be approved!</h1>
-        <h4 class="text-center heading">Prediction confidence: {{ percentage }}% ✅</h4>
+                <div class="info-card">
+                    <div class="card-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Important Note</h3>
+                        <p>This prediction is based on our AI model's analysis. While highly accurate, the final decision rests with your chosen financial institution.</p>
+                    </div>
+                </div>
+            </div>
 
-
-        <div class="row justify-content-center">
-            <a href="{{ url_for('main.home') }}" class="btn back-btn">Back to home</a>
+            <div class="action-buttons">
+                <a href="{{ url_for('main.home') }}" class="btn back-btn">
+                    <i class="fas fa-home"></i>
+                    Back to Home
+                </a>
+            </div>
         </div>
     </div>
+</div>
 {% endblock %}
 
 

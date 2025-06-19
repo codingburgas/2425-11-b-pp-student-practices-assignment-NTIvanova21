@@ -2,7 +2,7 @@
 
 {% block content %}
     <div>
-        <h1 style="margin-left: 35%">Login</h1>
+        <h1 style="margin-left: 0%;">Login</h1>
     </div>
     <form method="POST" action="">
     {{ form.hidden_tag() }}
@@ -15,9 +15,11 @@
          {{ form.password(class="form-control", placeholder=form.password.label.text|capitalize) }}
     </div>
 
-    <a href="{{ url_for("auth.register") }}" style="margin-left: 25%;font-size: 15pt;">Not registered? Sign up</a>
-    <div class="form-group submit">
-        {{ form.submit(class="btn btn-primary") }}
+    <div class="auth-actions-column">
+        <a href="{{ url_for("auth.register") }}" class="signup-link">Not registered? Sign up</a>
+        <div class="form-group submit">
+            {{ form.submit(class="btn btn-primary auth-button") }}
+        </div>
     </div>
     </form>
 

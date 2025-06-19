@@ -3,79 +3,82 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='base_style.css') }}">
     <link rel="stylesheet" href="{{ url_for('profile.static', filename='profilePageStyle.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 {% endblock %}
 
-
 {% block content %}
-    <div class="container-fluid">
+<div class="container py-4">
     {% block error %}
-            <div class="error-messages d-flex justify-content-center">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }} alert-dismissible fade show position-relative" role="alert" style="min-width: 300px;">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="flex-grow-1 text-center">{{ message }}</div>
-                                    <button type="button" class="btn-close " data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
+        <div class="error-messages d-flex justify-content-center">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show position-relative" role="alert" style="min-width: 300px;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="flex-grow-1 text-center">{{ message }}</div>
+                                <button type="button" class="btn-close " data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-            </div>
-        {% endblock %}
-        <div class="row split">
-            <div class="col-md-6  text-white d-flex flex-column align-items-center justify-content-center left-part">
-              <img class="fas fa-circle ms-2 profile-picture mb-3" src="{{ url_for('profile.static', filename='profile_pictures/{}'.format(user.profilePicture)) }}" alt="Pic2">
-
-                <p class="text-center names">
-                    {{ user.first_name }} {{ user.middle_name }} {{ user.last_name }}
-                </p>
-                <a href="#popup" class="open-button mt-2">Change Profile Picture</a>
-            </div>
-            <div class="col-md-6 text-dark d-flex  justify-content-center right-part" style="background-color: #cce5ff; border-radius: 20px;">
-                <div class="info-box">
-                    <div class="row mb-3 info">
-                        <div class="col-6 text-start fw-bold">First name</div>
-                        <div class="col-6 text-end">{{ user.first_name }}</div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-6 text-start fw-bold">Middle name</div>
-                        <div class="col-6 text-end">{{ user.middle_name }}</div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-6 text-start fw-bold">Last name</div>
-                        <div class="col-6 text-end">{{ user.last_name }}</div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-5 text-start fw-bold">Email</div>
-                        <div class="col-7 text-end">{{ user.email }}</div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-6 text-start fw-bold">Role</div>
-                        <div class="col-6 text-end">{{ user.role }}</div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-6 text-start fw-bold">Password</div>
-                        <div class="col-6 text-end">******</div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+    {% endblock %}
+    <div class="row justify-content-center align-items-center">
+        <div class="col-lg-8">
+            <div class="profile-card shadow-lg rounded-4 p-4 d-flex flex-column flex-md-row align-items-center bg-white">
+                <div class="profile-left text-center me-md-5 mb-4 mb-md-0">
+                    <img class="profile-picture-profile mb-3 shadow" src="{{ url_for('profile.static', filename='profile_pictures/{}'.format(user.profilePicture)) }}" alt="Profile Picture">
+                    <h3 class="names mb-2">{{ user.first_name }} {{ user.middle_name }} {{ user.last_name }}</h3>
+                    <a href="#popup" class="open-button mt-2"><i class="fas fa-camera me-2"></i>Change Profile Picture</a>
+                </div>
+                <div class="profile-right flex-grow-1">
+                    <div class="info-box">
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-1 text-center"><i class="fas fa-user"></i></div>
+                            <div class="col-5 text-start fw-bold">First name</div>
+                            <div class="col-6 text-end">{{ user.first_name }}</div>
+                        </div>
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-1 text-center"><i class="fas fa-user"></i></div>
+                            <div class="col-5 text-start fw-bold">Middle name</div>
+                            <div class="col-6 text-end">{{ user.middle_name }}</div>
+                        </div>
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-1 text-center"><i class="fas fa-user"></i></div>
+                            <div class="col-5 text-start fw-bold">Last name</div>
+                            <div class="col-6 text-end">{{ user.last_name }}</div>
+                        </div>
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-1 text-center"><i class="fas fa-envelope"></i></div>
+                            <div class="col-5 text-start fw-bold">Email</div>
+                            <div class="col-6 text-end">{{ user.email }}</div>
+                        </div>
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-1 text-center"><i class="fas fa-user-tag"></i></div>
+                            <div class="col-5 text-start fw-bold">Role</div>
+                            <div class="col-6 text-end">{{ user.role }}</div>
+                        </div>
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-1 text-center"><i class="fas fa-lock"></i></div>
+                            <div class="col-5 text-start fw-bold">Password</div>
+                            <div class="col-6 text-end">******</div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            <a href="#password-popup" class="open-button btn btn-sm btn-info"><i class="fas fa-key me-2"></i>Change Password</a>
+                        </div>
                     </div>
                 </div>
-
-
-            </div>
-            <div class="d-flex justify-content-end">
-                <form method="POST" action="{{ url_for('profile.change_password', userId = user.userId) }}">
-                    <a href="#password-popup" class="open-button mt-2 btn btn-sm btn-info">Change Password</a>
-                </form>
             </div>
         </div>
     </div>
 
+    <!-- Profile Picture Popup -->
     <div id="popup" class="popup">
         <div class="popup-content">
             <a href="#" class="close">&times;</a>
-            <h4>Select a profile picture:</h4>
-            <div class="image-options">
+            <h4 class="mb-3"><i class="fas fa-image me-2"></i>Select a profile picture:</h4>
+            <div class="image-options d-flex flex-wrap justify-content-center">
                 <a href="{{ url_for('profile.change_profile_picture', userId=user.userId, profilePicture='man1.svg') }}">
                     <img src="{{ url_for('profile.static', filename='profile_pictures/man1.svg') }}" alt="Pic1">
                 </a>
@@ -85,8 +88,6 @@
                 <a href="{{ url_for('profile.change_profile_picture', userId=user.userId, profilePicture='man3.svg') }}">
                     <img src="{{ url_for('profile.static', filename='profile_pictures/man3.svg') }}" alt="Pic3">
                 </a>
-
-
                 <a href="{{ url_for('profile.change_profile_picture', userId=user.userId, profilePicture='woman1.svg') }}">
                     <img src="{{ url_for('profile.static', filename='profile_pictures/woman1.svg') }}" alt="Pic4">
                 </a>
@@ -96,15 +97,15 @@
                 <a href="{{ url_for('profile.change_profile_picture', userId=user.userId, profilePicture='woman3.svg') }}">
                     <img src="{{ url_for('profile.static', filename='profile_pictures/woman3.svg') }}" alt="Pic6">
                 </a>
-
             </div>
         </div>
     </div>
 
+    <!-- Password Change Popup -->
     <div id="password-popup" class="popup">
         <div class="popup-content-password">
             <a href="#" class="close">&times;</a>
-            <h4>Change Password</h4>
+            <h4 class="mb-3"><i class="fas fa-key me-2"></i>Change Password</h4>
             <form method="POST" action="{{ url_for('profile.change_password', userId=user.userId) }}">
                 <div class="mb-3 text-start">
                     <label for="current_password" class="form-label">Current Password</label>
@@ -118,9 +119,9 @@
                     <label for="confirm_password" class="form-label">Confirm New Password</label>
                     <input type="password" class="form-control" name="confirm_password" id="confirm_password" required>
                 </div>
-                <button type="submit" class="btn btn-sm btn-info">Change Password</button>
+                <button type="submit" class="btn btn-sm btn-info w-100"><i class="fas fa-save me-2"></i>Change Password</button>
             </form>
         </div>
     </div>
-
+</div>
 {% endblock %}

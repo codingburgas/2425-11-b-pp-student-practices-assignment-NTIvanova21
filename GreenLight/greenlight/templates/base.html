@@ -11,45 +11,69 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light py-2">
+    <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
-            <a class="navbar-brand" style="color: #006A71; cursor: default" href="#">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <i class="fas fa-leaf me-2" style="color: #006A71;"></i>
                 GreenLight
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li  class="nav-item dropdown d-inline-flex align-items-center">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle me-1"></i>{{ current_user.first_name }} {{ current_user.last_name }}
-                            </a>
-                            <img class="fas fa-circle ms-2 profile-picture" style="width: 70%; height: 70% ;margin:0; padding: 0" src="{{ url_for('profile.static', filename='profile_pictures/{}'.format(current_user.profilePicture)) }}" alt="Pic2">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img class="profile-picture me-2" src="{{ url_for('profile.static', filename='profile_pictures/{}'.format(current_user.profilePicture)) }}" alt="Profile Picture">
+                            <span>{{ current_user.first_name }} {{ current_user.last_name }}</span>
+                        </a>
 
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('profile.profile', userId = current_user.userId) }}">
+                                    <i class="fas fa-user me-2"></i>Profile
+                                </a>
+                            </li>
 
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="{{ url_for('profile.profile', userId = current_user.userId) }}">Profile</a></li>
-
-                                {% if current_user.role == 'admin' %}
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('main.show_accounts') }}">Manage accounts</a></li>
-                                {% elif current_user.role == 'bank' %}
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('main.loan_requests') }}">Loan requests</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('stats.stats') }}">Statistics</a></li>
-                                {% elif current_user.role == 'customer' %}
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('main.home') }}">Home</a></li>
-                                {% endif %}
-
+                            {% if current_user.role == 'admin' %}
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a></li>
-                            </ul>
-                        </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('main.show_accounts') }}">
+                                        <i class="fas fa-users-cog me-2"></i>Manage accounts
+                                    </a>
+                                </li>
+                            {% elif current_user.role == 'bank' %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('main.loan_requests') }}">
+                                        <i class="fas fa-file-invoice-dollar me-2"></i>Loan requests
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('stats.stats') }}">
+                                        <i class="fas fa-chart-line me-2"></i>Statistics
+                                    </a>
+                                </li>
+                            {% elif current_user.role == 'customer' %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('main.home') }}">
+                                        <i class="fas fa-home me-2"></i>Home
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('auth.logout') }}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -60,7 +84,6 @@
     <main class="container py-4">
         {% block content %}{% endblock %}
     </main>
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     {% block extra_js %}{% endblock %}

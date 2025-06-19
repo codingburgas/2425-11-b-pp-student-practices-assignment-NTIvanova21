@@ -1,22 +1,98 @@
 {% extends 'base.html' %}
 
 {% block extra_css %}
-
     <link rel="stylesheet" href="{{ url_for('AI.static', filename='approvalFormStyle.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='base_style.css') }}">
 {% endblock %}
 
 {% block content %}
+<div class="result-page disapproved">
+    <div class="result-container">
+        <div class="result-icon">
+            <i class="fas fa-exclamation-circle"></i>
+        </div>
+        
+        <div class="result-content">
+            <h1 class="result-title">We're Sorry</h1>
+            <p class="result-subtitle">Our AI model predicts potential challenges with your loan approval</p>
+            
+            <div class="confidence-meter">
+                <div class="confidence-label">
+                    <span>Prediction Confidence</span>
+                    <span class="confidence-value">{{ percentage }}%</span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: {{ percentage }}%"></div>
+                </div>
+            </div>
 
+            <div class="info-cards">
+                <div class="info-card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Improvement Tips</h3>
+                        <p>Here are some ways you can improve your chances of approval:</p>
+                        <ul class="improvement-tips">
+                            <li>
+                                <i class="fas fa-piggy-bank"></i>
+                                <span>Build a stronger savings history</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-credit-card"></i>
+                                <span>Improve your credit score</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-money-bill-wave"></i>
+                                <span>Consider a smaller loan amount</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-user-friends"></i>
+                                <span>Apply with a co-applicant</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
-    <div class="info-container justify-content-center">
-        <h1 class="text-center heading">Sorry! Your loan is not likely to be approved</h1>
-        <h4 class="text-center heading">Prediction confidence: {{ percentage }}% ❌</h4>
+                <div class="info-card">
+                    <div class="card-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Alternative Options</h3>
+                        <p>Consider these alternatives that might better suit your current situation:</p>
+                        <ul class="alternatives">
+                            <li>
+                                <i class="fas fa-clock"></i>
+                                <span>Delay the loan and build your financial profile</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-handshake"></i>
+                                <span>Explore secured loan options</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-comments-dollar"></i>
+                                <span>Consult with a financial advisor</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
-        <div class="row justify-content-center">
-            <a href="{{ url_for('main.home') }}" class="btn back-btn">Back to home</a>
+            <div class="action-buttons">
+                <a href="{{ url_for('main.home') }}" class="btn back-btn">
+                    <i class="fas fa-home"></i>
+                    Back to Home
+                </a>
+                <a href="{{ url_for('AI.approvalForm', userId=current_user.userId) }}" class="btn retry-btn">
+                    <i class="fas fa-redo"></i>
+                    Try Again
+                </a>
+            </div>
         </div>
     </div>
+</div>
 {% endblock %}
 
 

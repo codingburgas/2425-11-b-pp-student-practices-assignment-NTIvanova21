@@ -450,9 +450,30 @@ body::before {
 }
 
 .trust-text p {
+    color: #6c757d;
+    font-size: 0.9rem;
     margin: 0;
-    font-size: 0.95rem;
-    color: #495057;
+}
+
+.metrics-link {
+    display: inline-flex;
+    align-items: center;
+    color: #006A71;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    background: rgba(0, 106, 113, 0.1);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.metrics-link:hover {
+    background: rgba(0, 106, 113, 0.2);
+    color: #006A71;
+    text-decoration: none;
+    transform: translateY(-1px);
 }
 
 .accuracy-badge {

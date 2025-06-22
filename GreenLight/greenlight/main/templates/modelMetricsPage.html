@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('main.static', filename='modelMetricsStyle.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+{% endblock %}
+
+{% block content %}
+<div class="metrics-hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8" data-aos="fade-right" data-aos-duration="1000">
+                <div class="metrics-badge">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Model Performance Analytics</span>
+                </div>
+                <h1 class="metrics-title">Logistic Regression <span class="text-gradient">Model Metrics</span></h1>
+                <p class="metrics-subtitle">Comprehensive analysis of our AI-powered loan prediction model</p>
+                <div class="metrics-description">
+                    <p>Explore the performance metrics, model parameters, and feature importance of our logistic regression model that powers GreenLight's loan approval predictions.</p>
+                </div>
+            </div>
+            <div class="col-lg-4" data-aos="fade-left" data-aos-duration="1000">
+                <div class="metrics-hero-image">
+                    <div class="glow-effect"></div>
+                    <i class="fas fa-brain primary-icon"></i>
+                    <div class="floating-elements">
+                        <i class="fas fa-percentage float-icon success"></i>
+                        <i class="fas fa-chart-bar float-icon primary"></i>
+                        <i class="fas fa-cogs float-icon secondary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="metrics-section">
+    <div class="container">
+        <!-- Performance Metrics -->
+        <div class="section-header text-center" data-aos="fade-up">
+            <h2 class="section-title">Performance Metrics</h2>
+            <p class="section-subtitle">Key indicators of model accuracy and reliability</p>
+        </div>
+        
+        <div class="row g-4 mb-5">
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+                <div class="metric-card accuracy-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h3 class="metric-value">{{ accuracy }}%</h3>
+                        <h4 class="metric-label">Accuracy</h4>
+                        <p class="metric-description">Overall prediction accuracy</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+                <div class="metric-card precision-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-crosshairs"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h3 class="metric-value">{{ precision }}%</h3>
+                        <h4 class="metric-label">Precision</h4>
+                        <p class="metric-description">True positives / (True + False positives)</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+                <div class="metric-card recall-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h3 class="metric-value">{{ recall }}%</h3>
+                        <h4 class="metric-label">Recall</h4>
+                        <p class="metric-description">True positives / (True + False negatives)</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
+                <div class="metric-card f1-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h3 class="metric-value">{{ f1_score }}%</h3>
+                        <h4 class="metric-label">F1 Score</h4>
+                        <p class="metric-description">Harmonic mean of precision and recall</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confusion Matrix -->
+        <div class="row mb-5">
+            <div class="col-lg-6" data-aos="fade-right">
+                <div class="metrics-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-table me-2"></i>Confusion Matrix</h3>
+                        <p>Detailed breakdown of predictions vs actual outcomes</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="confusion-matrix">
+                            <div class="matrix-cell header-corner"></div>
+                            <div class="matrix-cell header-top">Predicted Negative</div>
+                            <div class="matrix-cell header-top">Predicted Positive</div>
+                            <div class="matrix-cell header-side">Actual Negative</div>
+                            <div class="matrix-cell tn">{{ tn }}</div>
+                            <div class="matrix-cell fp">{{ fp }}</div>
+                            <div class="matrix-cell header-side">Actual Positive</div>
+                            <div class="matrix-cell fn">{{ fn }}</div>
+                            <div class="matrix-cell tp">{{ tp }}</div>
+                        </div>
+                        <div class="matrix-legend">
+                            <div class="legend-item">
+                                <span class="legend-color tn-color"></span>
+                                <span>True Negative (TN): {{ tn }}</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color fp-color"></span>
+                                <span>False Positive (FP): {{ fp }}</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color fn-color"></span>
+                                <span>False Negative (FN): {{ fn }}</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color tp-color"></span>
+                                <span>True Positive (TP): {{ tp }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6" data-aos="fade-left">
+                <div class="metrics-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-cogs me-2"></i>Model Parameters</h3>
+                        <p>Configuration settings of the logistic regression model</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="params-grid">
+                            <div class="param-item">
+                                <div class="param-label">Learning Rate</div>
+                                <div class="param-value">{{ model_params.learning_rate }}</div>
+                            </div>
+                            <div class="param-item">
+                                <div class="param-label">Threshold</div>
+                                <div class="param-value">{{ model_params.threshold }}</div>
+                            </div>
+                            <div class="param-item">
+                                <div class="param-label">Bias</div>
+                                <div class="param-value">{{ model_params.bias }}</div>
+                            </div>
+                            <div class="param-item">
+                                <div class="param-label">Features</div>
+                                <div class="param-value">{{ model_params.num_features }}</div>
+                            </div>
+                            <div class="param-item">
+                                <div class="param-label">Weights</div>
+                                <div class="param-value">{{ model_params.num_weights }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Importance -->
+        <div class="row">
+            <div class="col-12" data-aos="fade-up">
+                <div class="metrics-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-bar me-2"></i>Feature Importance</h3>
+                        <p>Relative importance of each feature in the model's decision-making process</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="feature-importance-grid">
+                            {% for feature, importance in feature_importance %}
+                            <div class="feature-item" data-aos="fade-up" data-aos-delay="{{ loop.index * 50 }}">
+                                <div class="feature-info">
+                                    <h4 class="feature-name">{{ feature }}</h4>
+                                    <div class="feature-bar">
+                                        <div class="feature-bar-fill" style="width: {{ (importance / feature_importance[0][1]) * 100 }}%"></div>
+                                    </div>
+                                </div>
+                                <div class="feature-value">{{ "%.4f"|format(importance) }}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back to Home Button -->
+        <div class="text-center mt-5" data-aos="fade-up">
+            <a href="{{ url_for('main.home') }}" class="btn back-btn">
+                <i class="fas fa-arrow-left me-2"></i>
+                Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+    AOS.init({
+        once: true,
+        offset: 100,
+        duration: 800
+    });
+</script>
+{% endblock %} 

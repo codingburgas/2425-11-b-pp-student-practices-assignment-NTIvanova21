@@ -7,6 +7,8 @@ from .. import db
 
 from . import main_bp
 from ..AI_model.logistic_regression_model import train_and_evaluate_model
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, classification_report
+import numpy as np
 
 model, scaler, label_encoders, selected_features, accuracy = train_and_evaluate_model()
 from ..models import User, Loan
@@ -177,6 +179,62 @@ def delete_loan_requests(loanId):
         db.session.commit()
 
     return redirect(url_for('main.loan_requests'))
+
+@main_bp.route('/model_metrics')
+def model_metrics():
+    """
+        Display detailed metrics of the logistic regression model.
+    """
+    # Get model metrics by running evaluation
+    from ..AI_model.logistic_regression_model import load_and_prepare_data
+    from sklearn.model_selection import train_test_split
+    
+    # Load and prepare data
+    X, y, scaler, label_encoders, selected_features = load_and_prepare_data()
+    
+    # Split data
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, stratify=y, random_state=42
+    )
+    
+    # Get predictions
+    y_pred = [model.predict_class(x) for x in X_test]
+    
+    # Calculate metrics
+    accuracy_val = round(accuracy_score(y_test, y_pred) * 100, 2)
+    precision_val = round(precision_score(y_test, y_pred) * 100, 2)
+    recall_val = round(recall_score(y_test, y_pred) * 100, 2)
+    f1_val = round(f1_score(y_test, y_pred) * 100, 2)
+    
+    # Confusion matrix
+    cm = confusion_matrix(y_test, y_pred)
+    tn, fp, fn, tp = cm.ravel()
+    
+    # Model parameters
+    model_params = {
+        'learning_rate': model.learning_rate,
+        'threshold': model.threshold,
+        'bias': round(model.bias, 4),
+        'num_features': len(selected_features),
+        'num_weights': len(model.weights)
+    }
+    
+    # Feature importance (using absolute weight values)
+    feature_importance = list(zip(selected_features, np.abs(model.weights)))
+    feature_importance.sort(key=lambda x: x[1], reverse=True)
+    
+    return render_template(
+        "modelMetricsPage.html",
+        accuracy=accuracy_val,
+        precision=precision_val,
+        recall=recall_val,
+        f1_score=f1_val,
+        confusion_matrix=cm,
+        tn=tn, fp=fp, fn=fn, tp=tp,
+        model_params=model_params,
+        feature_importance=feature_importance,
+        selected_features=selected_features
+    )
 
 
 

@@ -199,12 +199,14 @@ def model_metrics():
     
     # Get predictions
     y_pred = [model.predict_class(x) for x in X_test]
+    y_pred_proba = np.array([model.predict_proba(x) for x in X_test])
     
     # Calculate metrics
     accuracy_val = round(accuracy_score(y_test, y_pred) * 100, 2)
     precision_val = round(precision_score(y_test, y_pred) * 100, 2)
     recall_val = round(recall_score(y_test, y_pred) * 100, 2)
     f1_val = round(f1_score(y_test, y_pred) * 100, 2)
+    log_loss_val = round(model.calc_loss(y_pred_proba, y_test), 4)
     
     # Confusion matrix
     cm = confusion_matrix(y_test, y_pred)
@@ -229,6 +231,7 @@ def model_metrics():
         precision=precision_val,
         recall=recall_val,
         f1_score=f1_val,
+        log_loss=log_loss_val,
         confusion_matrix=cm,
         tn=tn, fp=fp, fn=fn, tp=tp,
         model_params=model_params,

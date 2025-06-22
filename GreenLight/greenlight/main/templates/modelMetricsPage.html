@@ -43,8 +43,8 @@
             <p class="section-subtitle">Key indicators of model accuracy and reliability</p>
         </div>
         
-        <div class="row g-4 mb-5">
-            <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4 mb-5 justify-content-center">
+            <div class="col" data-aos="fade-up" data-aos-delay="100">
                 <div class="metric-card accuracy-card">
                     <div class="metric-icon">
                         <i class="fas fa-bullseye"></i>
@@ -52,12 +52,12 @@
                     <div class="metric-content">
                         <h3 class="metric-value">{{ accuracy }}%</h3>
                         <h4 class="metric-label">Accuracy</h4>
-                        <p class="metric-description">Overall prediction accuracy</p>
+                        <p class="metric-description">Overall prediction correctness</p>
                     </div>
                 </div>
             </div>
             
-            <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+            <div class="col" data-aos="fade-up" data-aos-delay="200">
                 <div class="metric-card precision-card">
                     <div class="metric-icon">
                         <i class="fas fa-crosshairs"></i>
@@ -65,12 +65,12 @@
                     <div class="metric-content">
                         <h3 class="metric-value">{{ precision }}%</h3>
                         <h4 class="metric-label">Precision</h4>
-                        <p class="metric-description">True positives / (True + False positives)</p>
+                        <p class="metric-description">Of positive predictions</p>
                     </div>
                 </div>
             </div>
             
-            <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+            <div class="col" data-aos="fade-up" data-aos-delay="300">
                 <div class="metric-card recall-card">
                     <div class="metric-icon">
                         <i class="fas fa-search"></i>
@@ -78,12 +78,12 @@
                     <div class="metric-content">
                         <h3 class="metric-value">{{ recall }}%</h3>
                         <h4 class="metric-label">Recall</h4>
-                        <p class="metric-description">True positives / (True + False negatives)</p>
+                        <p class="metric-description">Of actual positives</p>
                     </div>
                 </div>
             </div>
             
-            <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
+            <div class="col" data-aos="fade-up" data-aos-delay="400">
                 <div class="metric-card f1-card">
                     <div class="metric-icon">
                         <i class="fas fa-balance-scale"></i>
@@ -91,7 +91,20 @@
                     <div class="metric-content">
                         <h3 class="metric-value">{{ f1_score }}%</h3>
                         <h4 class="metric-label">F1 Score</h4>
-                        <p class="metric-description">Harmonic mean of precision and recall</p>
+                        <p class="metric-description">Balance of precision & recall</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col" data-aos="fade-up" data-aos-delay="500">
+                <div class="metric-card log-loss-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h3 class="metric-value">{{ log_loss }}</h3>
+                        <h4 class="metric-label">Log Loss</h4>
+                        <p class="metric-description">Cross-entropy loss <br>(lower is better)</p>
                     </div>
                 </div>
             </div>

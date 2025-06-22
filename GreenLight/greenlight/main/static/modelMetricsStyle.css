@@ -157,6 +157,10 @@
     background: rgba(255, 255, 255, 0.95);
 }
 
+.metric-card.f1-card .metric-icon { background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%); }
+
+.metric-card.log-loss-card .metric-icon { background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%); }
+
 .metric-icon {
     width: 64px;
     height: 64px;
@@ -181,6 +185,7 @@
     font-weight: 700;
     color: #006A71;
     margin-bottom: 0.5rem;
+    line-height: 1.4;
 }
 
 .metric-label {

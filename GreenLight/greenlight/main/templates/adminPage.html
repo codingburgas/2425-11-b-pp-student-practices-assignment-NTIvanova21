@@ -5,22 +5,6 @@
 {% endblock %}
 
 {% block content %}
-    {% block error %}
-        <div class="error-messages d-flex justify-content-center">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }} alert-dismissible fade show position-relative" role="alert" style="min-width: 300px;">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="flex-grow-1 text-center">{{ message }}</div>
-                                <button type="button" class="btn-close " data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-        </div>
-    {% endblock %}
     <div class="admin-container">
         <!-- <button class="fab-add-user" title="Add User"><i class="fas fa-user-plus"></i></button> -->
         <div class="admin-header"><i class="fas fa-users-cog me-2"></i>Admin Panel &mdash; Manage Accounts</div>
@@ -30,64 +14,64 @@
         <table class="table admin-table text-center align-middle">
             <thead class="table-light">
                 <tr>
-                    <th>User</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                <th>User</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for account in accounts %}
                 <tr>
-                    <td>
-                        <div class="admin-user-cell">
-                            <img class="profile-avatar" src="{{ url_for('profile.static', filename='profile_pictures/{}'.format(account.profilePicture or 'default.svg')) }}" alt="avatar">
-                            <div>
-                                <div style="font-weight: 700;">{% if account.first_name %}{{ account.first_name }}{% endif %}{% if account.middle_name %} {{ account.middle_name }}{% endif %}{% if account.last_name %} {{ account.last_name }}{% endif %}</div>
-                            </div>
+                <td>
+                    <div class="admin-user-cell">
+                        <img class="profile-avatar" src="{{ url_for('profile.static', filename='profile_pictures/{}'.format(account.profilePicture or 'default.svg')) }}" alt="avatar">
+                        <div>
+                            <div style="font-weight: 700;">{% if account.first_name %}{{ account.first_name }}{% endif %}{% if account.middle_name %} {{ account.middle_name }}{% endif %}{% if account.last_name %} {{ account.last_name }}{% endif %}</div>
                         </div>
-                    </td>
-                    <td>{{ account.email }}</td>
-                    <td>
-                        <span class="role-badge {{ account.role }}" title="{{ account.role|capitalize }}">
-                            {% if account.role == 'admin' %}<i class="fas fa-crown" title="Admin"></i>{% elif account.role == 'bank' %}<i class="fas fa-university" title="Bank"></i>{% else %}<i class="fas fa-user" title="Customer"></i>{% endif %}
-                            {{ account.role|capitalize }}
-                        </span>
-                    </td>
-                    <td>
-                        {% if account.isActive %}
-                            <span class="status-badge" title="Active"><i class="fas fa-check-circle"></i>Active</span>
-                        {% else %}
-                            <span class="status-badge inactive" title="Inactive"><i class="fas fa-times-circle"></i>Inactive</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <div class="admin-action-btns">
-                            <form method="POST" action="{{ url_for('main.delete_account', userId=account.userId) }}" style="display:inline;">
-                                <button type="submit" class="action-btn delete" title="Delete Account"><i class="fas fa-trash-alt"></i></button>
-                            </form>
-                            {% if account.isActive %}
-                                <form method="POST" action="{{ url_for('main.deactivate_account', userId=account.userId) }}" style="display:inline;">
-                                    <button type="submit" class="action-btn deactivate" title="Deactivate Account"><i class="fas fa-user-slash"></i></button>
-                                </form>
-                            {% else %}
-                                <form method="POST" action="{{ url_for('main.activate_account', userId=account.userId) }}" style="display:inline;">
-                                    <button type="submit" class="action-btn activate" title="Activate Account"><i class="fas fa-user-check"></i></button>
-                                </form>
-                            {% endif %}
-                            <div class="dropdown d-inline-block">
-                                <button class="action-btn role dropdown-toggle" type="button" id="roleDropdown{{ account.userId }}" data-bs-toggle="dropdown" aria-expanded="false" title="Change Role">
-                                    <i class="fas fa-exchange-alt"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="roleDropdown{{ account.userId }}">
-                                    <li><a class="dropdown-item" href="{{ url_for('main.change_role', role = 'admin', userId=account.userId) }}" title="Set as Admin"><i class="fas fa-crown"></i> admin</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('main.change_role', role = 'bank', userId=account.userId) }}" title="Set as Bank"><i class="fas fa-university"></i> bank</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('main.change_role', role = 'customer', userId=account.userId) }}" title="Set as Customer"><i class="fas fa-user"></i> customer</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </td>
+                    </div>
+                </td>
+                <td>{{ account.email }}</td>
+                <td>
+                <span class="role-badge {{ account.role }}" title="{{ account.role|capitalize }}">
+                    {% if account.role == 'admin' %}<i class="fas fa-crown" title="Admin"></i>{% elif account.role == 'bank' %}<i class="fas fa-university" title="Bank"></i>{% else %}<i class="fas fa-user" title="Customer"></i>{% endif %}
+                    {{ account.role|capitalize }}
+                </span>
+                </td>
+                <td>
+                {% if account.isActive %}
+                    <span class="status-badge" title="Active"><i class="fas fa-check-circle"></i>Active</span>
+                {% else %}
+                    <span class="status-badge inactive" title="Inactive"><i class="fas fa-times-circle"></i>Inactive</span>
+                {% endif %}
+                </td>
+                <td>
+                <div class="admin-action-btns">
+                    <form method="POST" action="{{ url_for('main.delete_account', userId=account.userId) }}" style="display:inline;">
+                        <button type="submit" class="action-btn delete" title="Delete Account"><i class="fas fa-trash-alt"></i></button>
+                    </form>
+                    {% if account.isActive %}
+                        <form method="POST" action="{{ url_for('main.deactivate_account', userId=account.userId) }}" style="display:inline;">
+                            <button type="submit" class="action-btn deactivate" title="Deactivate Account"><i class="fas fa-user-slash"></i></button>
+                        </form>
+                    {% else %}
+                        <form method="POST" action="{{ url_for('main.activate_account', userId=account.userId) }}" style="display:inline;">
+                            <button type="submit" class="action-btn activate" title="Activate Account"><i class="fas fa-user-check"></i></button>
+                        </form>
+                    {% endif %}
+                    <div class="dropdown d-inline-block">
+                        <button class="action-btn role dropdown-toggle" type="button" id="roleDropdown{{ account.userId }}" data-bs-toggle="dropdown" aria-expanded="false" title="Change Role">
+                            <i class="fas fa-exchange-alt"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="roleDropdown{{ account.userId }}">
+                            <li><a class="dropdown-item" href="{{ url_for('main.change_role', role = 'admin', userId=account.userId) }}" title="Set as Admin"><i class="fas fa-crown"></i> admin</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('main.change_role', role = 'bank', userId=account.userId) }}" title="Set as Bank"><i class="fas fa-university"></i> bank</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('main.change_role', role = 'customer', userId=account.userId) }}" title="Set as Customer"><i class="fas fa-user"></i> customer</a></li>
+                        </ul>
+                    </div>
+                </div>
+                </td>
                 </tr>
                 {% endfor %}
             </tbody>

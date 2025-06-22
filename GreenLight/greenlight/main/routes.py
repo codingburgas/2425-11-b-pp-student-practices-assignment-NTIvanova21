@@ -73,7 +73,7 @@ def deactivate_account(userId):
                           recipients=[user.email], sender=current_app.config['MAIL_USERNAME'])
 
             mail.send(msg)
-            flash("Activation email sent successfully!", "success")
+            flash("Deactivation email sent successfully!", "success")
         except Exception as e:
             print("Error:", e)
             flash("Account activated but email could not be sent.", "warning")
@@ -119,6 +119,7 @@ def delete_account(userId):
         db.session.delete(user)
 
     db.session.commit()
+    flash("Account deleted successfully!", "success")
     return redirect(url_for('main.show_accounts'))
 @main_bp.route('/loan_requests', methods=['GET', 'POST'])
 @login_required
@@ -177,7 +178,7 @@ def delete_loan_requests(loanId):
         UserLoan.query.filter_by(loanId=loanId).delete()
         db.session.delete(loan)
         db.session.commit()
-
+        flash("Loan request deleted successfully!", "success")
     return redirect(url_for('main.loan_requests'))
 
 @main_bp.route('/model_metrics')

@@ -11,24 +11,6 @@
     <p class="subtitle">Check your loan eligibility instantly using our AI-powered system</p>
 </div>
 
-{% block error %}
-    <div class="error-messages">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                        <div class="alert-content">
-                            <i class="fas fa-info-circle alert-icon"></i>
-                            <span>{{ message }}</span>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-    </div>
-{% endblock %}
-
 <div class="form-container">
     <form method="POST" action="" class="loan-form">
         {{ form.hidden_tag() }}
@@ -177,7 +159,6 @@
         </div>
     </form>
 </div>
-
 {% endblock %}
 
 

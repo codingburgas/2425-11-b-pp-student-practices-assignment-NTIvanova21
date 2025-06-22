@@ -54,3 +54,24 @@ class UserLoan(db.Model):
     __table_args__ = {'extend_existing': True}
     userId = db.Column(db.Integer, db.ForeignKey('Users.userId'), primary_key=True, nullable=False)
     loanId = db.Column(db.Integer, db.ForeignKey('Loans.loanId'), primary_key=True, nullable=False)
+
+
+class Rating(db.Model):
+    __tablename__ = 'Ratings'
+    __table_args__ = {'extend_existing': True}
+    
+    ratingId = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    userId = db.Column(db.Integer, db.ForeignKey('Users.userId'), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    comment = db.Column(db.String(1000), nullable=True)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    
+    user = db.relationship('User', backref='ratings')
+
+
+class UserRating(db.Model):
+    __tablename__ = 'UserRatings'
+    __table_args__ = {'extend_existing': True}
+    userId = db.Column(db.Integer, db.ForeignKey('Users.userId'), primary_key=True, nullable=False)
+    ratingId = db.Column(db.Integer, db.ForeignKey('Ratings.ratingId'), primary_key=True, nullable=False)
+

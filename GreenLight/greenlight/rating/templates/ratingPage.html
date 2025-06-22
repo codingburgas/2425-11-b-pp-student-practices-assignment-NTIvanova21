@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('main.static', filename='homePageStyle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('rating.static', filename='ratingPageStyle.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+{% endblock %}
+
+{% block content %}
+<div class="rating-container">
+    <div class="container">
+        <!-- Header Section -->
+        <div class="rating-header text-center" data-aos="fade-up">
+            <h1 class="rating-title">How was your experience with <span class="text-gradient">GreenLight</span>?</h1>
+            <p class="rating-subtitle">Your feedback helps us improve and provide better service to our users</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Rating Form Section -->
+            <div class="col-lg-6" data-aos="fade-right" data-aos-delay="200">
+                <div class="rating-form-card" style="width: 89%;">
+                    <div class="form-header">
+                        <h3><i class="fas fa-edit me-2"></i>Share Your Rating</h3>
+                    </div>
+
+                    <form method="POST" class="rating-form">
+                        <div class="rating-section">
+                            <label class="rating-label">Rate your experience:</label>
+                            <div class="star-rating" id="starRating">
+                                <input type="radio" name="rating" value="5" id="star5">
+                                <label for="star5" class="star"><i class="fas fa-star"></i></label>
+                                
+                                <input type="radio" name="rating" value="4" id="star4">
+                                <label for="star4" class="star"><i class="fas fa-star"></i></label>
+                                
+                                <input type="radio" name="rating" value="3" id="star3">
+                                <label for="star3" class="star"><i class="fas fa-star"></i></label>
+                                
+                                <input type="radio" name="rating" value="2" id="star2">
+                                <label for="star2" class="star"><i class="fas fa-star"></i></label>
+                                
+                                <input type="radio" name="rating" value="1" id="star1">
+                                <label for="star1" class="star"><i class="fas fa-star"></i></label>
+                            </div>
+                            <div class="rating-text" id="ratingText">
+                                Click to rate
+                            </div>
+                        </div>
+
+                        <div class="comment-section">
+                            <label for="comment" class="comment-label">Share your thoughts (optional):</label>
+                            <textarea 
+                                id="comment" 
+                                name="comment" 
+                                class="comment-textarea" 
+                                placeholder="Tell us about your experience with GreenLight..."
+                                rows="4"
+                            ></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="submit-btn">
+                                <i class="fas fa-paper-plane me-2"></i>
+                                Submit Rating
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Statistics Section -->
+            <div class="col-lg-3" data-aos="fade-up" data-aos-delay="400">
+                <div class="stats-card" style="margin-left: -17%; width: 100%;">
+                    <div class="stats-header">
+                        <h3><i class="fas fa-chart-bar me-2"></i>Community Ratings</h3>
+                    </div>
+                    
+                    <div class="overall-rating">
+                        <div class="avg-rating-display">
+                            <div class="avg-number">{{ avg_rating }}</div>
+                            <div class="avg-stars">
+                                {% for i in range(1, 6) %}
+                                    <i class="fas fa-star {% if i <= avg_rating %}filled{% else %}{% if i - 0.5 <= avg_rating %}half-filled{% endif %}{% endif %}"></i>
+                                {% endfor %}
+                            </div>
+                            <div class="total-ratings">{{ total_ratings }} ratings</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-distribution">
+                        <h4>Rating Distribution</h4>
+                        {% for i in range(5, 0, -1) %}
+                            <div class="rating-bar">
+                                <span class="star-label">{{ i }} <i class="fas fa-star"></i></span>
+                                <div class="progress">
+                                    {% set count = rating_stats.get(i, 0) %}
+                                    {% set percentage = (count / total_ratings * 100) if total_ratings > 0 else 0 %}
+                                    <div class="progress-bar" style="width: {{ percentage }} %"></div>
+                                </div>
+                                <span class="count-label">{{ count }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            {% if recent_comments %}
+            <div class="col-lg-3" data-aos="fade-left" data-aos-delay="600">
+                <div class="comments-card" style="margin-left: -10%; width: 105%;">
+                    <div class="comments-header">
+                        <h3><i class="fas fa-comments me-2"></i>Recent Comments</h3>
+                    </div>
+                    <div class="comments-list">
+                        {% for comment in recent_comments %}
+                        <div class="comment-item">
+                            <div class="comment-header">
+                                <div class="comment-stars">
+                                    {% for i in range(1, 6) %}
+                                        <i class="fas fa-star {% if i <= comment.rating %}filled{% endif %}"></i>
+                                    {% endfor %}
+                                </div>
+                                <div class="comment-date">{{ comment.created_at.strftime('%b %d, %Y') }}</div>
+                            </div>
+                            <div class="comment-text">{{ comment.comment }}</div>
+                            <div class="comment-author">- {{ comment.user.first_name }} {{ comment.user.last_name }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+    AOS.init({
+        once: true,
+        offset: 100,
+        duration: 800
+    });
+
+    // Star rating functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const stars = document.querySelectorAll('.star-rating .star');
+        const ratingText = document.getElementById('ratingText');
+        const ratingInputs = document.querySelectorAll('input[name="rating"]');
+
+        const ratingMessages = {
+            1: 'Poor!',
+            2: 'Fair!',
+            3: 'Good!',
+            4: 'Very Good!',
+            5: 'Excellent!'
+        };
+
+        // Handle star hover
+        stars.forEach((star, index) => {
+            star.addEventListener('mouseenter', function() {
+                const rating = 5 - index;
+                highlightStars(rating);
+                ratingText.textContent = ratingMessages[rating];
+            });
+
+            star.addEventListener('mouseleave', function() {
+                const checkedInput = document.querySelector('input[name="rating"]:checked');
+                if (checkedInput) {
+                    highlightStars(parseInt(checkedInput.value));
+                    ratingText.textContent = ratingMessages[parseInt(checkedInput.value)];
+                } else {
+                    resetStars();
+                    ratingText.textContent = 'Click to rate';
+                }
+            });
+
+            star.addEventListener('click', function() {
+                const rating = 5 - index;
+                document.getElementById(`star${rating}`).checked = true;
+                highlightStars(rating);
+                ratingText.textContent = ratingMessages[rating];
+            });
+        });
+
+        // Handle radio button changes
+        ratingInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                const rating = parseInt(this.value);
+                highlightStars(rating);
+                ratingText.textContent = ratingMessages[rating];
+            });
+        });
+
+        function highlightStars(rating) {
+            stars.forEach((star, index) => {
+                const starRating = 5 - index;
+                if (starRating <= rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function resetStars() {
+            stars.forEach(star => {
+                star.classList.remove('active');
+            });
+        }
+
+        // Initialize stars based on current rating
+        const checkedInput = document.querySelector('input[name="rating"]:checked');
+        if (checkedInput) {
+            highlightStars(parseInt(checkedInput.value));
+            ratingText.textContent = ratingMessages[parseInt(checkedInput.value)];
+        }
+    });
+</script>
+{% endblock %} 

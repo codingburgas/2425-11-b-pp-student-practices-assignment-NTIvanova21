@@ -51,6 +51,9 @@ def create_app(config):
     from .AI_model import AI_bp
     app.register_blueprint(AI_bp)
 
+    from .rating import rating
+    app.register_blueprint(rating)
+
     @app.errorhandler(404)
     def not_found_error(error):
         """Render a custom 404 error page."""

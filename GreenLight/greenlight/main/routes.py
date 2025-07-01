@@ -2,7 +2,7 @@ from flask import render_template, url_for, redirect, flash, request, current_ap
 from flask_login import current_user, login_required
 from flask_mail import Message
 
-from greenlight.models import UserLoan
+from greenlight.models import UserLoan, Rating, UserRating
 from .. import db
 
 from . import main_bp
@@ -106,13 +106,21 @@ def change_role(role, userId):
 
     return redirect(url_for('main.show_accounts'))
 
+
 @main_bp.route('/delete_account/<int:userId>', methods=['GET', 'POST'])
 @login_required
 def delete_account(userId):
     """
-        Permanently delete a user and their associated loans.
+        Permanently delete a user and their associated loans and ratings.
     """
     UserLoan.query.filter_by(userId=userId).delete()
+
+    rating_ids = [r.ratingId for r in Rating.query.filter_by(userId=userId).all()]
+
+    UserRating.query.filter(UserRating.ratingId.in_(rating_ids)).delete()
+
+    Rating.query.filter_by(userId=userId).delete()
+
 
     user = User.query.get(userId)
     if user:
